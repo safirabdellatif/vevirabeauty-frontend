@@ -92,7 +92,7 @@ export function CheckoutModal() {
     try {
       const result = await createOrder({
         customer: { name: data.name, phone: data.phone },
-        cart: { items: cartItems, total, currency: "SAR" },
+        cart: { items: cartItems, total, currency: "MAD" },
         attribution,
         analytics: {
           eventId,
