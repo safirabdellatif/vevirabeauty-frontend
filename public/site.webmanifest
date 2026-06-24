@@ -1,7 +1,7 @@
 {
-  "name": "سَنَدي",
-  "short_name": "mysanad",
-  "description": "Pharmacy-grade beauty and care from MySanad.",
+  "name": "فيرا بيوتي",
+  "short_name": "Vevira",
+  "description": "عناية مغربية بمعايير عالمية. الدفع عند الاستلام داخل المغرب.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FAFBF9",
