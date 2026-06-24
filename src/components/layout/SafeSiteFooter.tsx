@@ -18,12 +18,12 @@ export function SafeSiteFooter() {
                 />
               </span>
               <span className="flex flex-col leading-none">
-                <span className="text-xl font-bold text-white">سَنَدي</span>
-                <span className="text-xs text-brand-gray font-sans">mysanad</span>
+                <span className="text-xl font-bold text-white">فيرا بيوتي</span>
+                <span className="text-xs text-brand-gray font-sans">vevirabeauty</span>
               </span>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
-              متجر سعودي للتسوق أونلاين. دفع عند الاستلام، توصيل داخل المملكة، وخدمة
+              متجر مغربي للتسوق أونلاين. دفع عند الاستلام، توصيل داخل المغرب، وخدمة
               عملاء جاهزة للمساعدة.
             </p>
           </div>
@@ -65,7 +65,7 @@ export function SafeSiteFooter() {
         </div>
 
         <div className="mt-10 pt-8 border-t border-white/10 flex flex-wrap gap-4 justify-center text-sm text-gray-400">
-          {["الدفع عند الاستلام", "توصيل داخل السعودية", "دعم بالعربية"].map((badge) => (
+          {["الدفع عند الاستلام", "توصيل داخل المغرب", "دعم بالعربية"].map((badge) => (
             <span key={badge} className="flex items-center gap-1">
               <span className="text-brand-gold">✓</span> {badge}
             </span>
@@ -73,7 +73,7 @@ export function SafeSiteFooter() {
         </div>
 
         <p className="mt-8 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} سَنَدي mysanad — جميع الحقوق محفوظة
+          © {new Date().getFullYear()} فيرا بيوتي vevirabeauty — جميع الحقوق محفوظة
         </p>
       </div>
     </footer>

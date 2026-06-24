@@ -16,8 +16,8 @@ export function MinimalSiteHeader() {
             />
           </span>
           <span className="flex flex-col leading-none">
-            <span className="text-xl font-bold text-brand-teal tracking-tight">سَنَدي</span>
-            <span className="text-xs text-brand-gray font-sans">mysanad</span>
+            <span className="text-xl font-bold text-brand-teal tracking-tight">فيرا بيوتي</span>
+            <span className="text-xs text-brand-gray font-sans">vevirabeauty</span>
           </span>
         </Link>
         <Link

@@ -19,12 +19,12 @@ export function SiteFooter() {
                 />
               </span>
               <span className="flex flex-col leading-none">
-                <span className="text-xl font-bold text-white">سَنَدي</span>
-                <span className="text-xs text-brand-gray font-sans">mysanad</span>
+                <span className="text-xl font-bold text-white">فيرا بيوتي</span>
+                <span className="text-xs text-brand-gray font-sans">vevirabeauty</span>
               </span>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
-              بيت عناية سعودي بمعايير صيدلية. نختار تركيبات مرخّصة من هيئة الغذاء والدواء، حلال، بجرعات مفصّحة — للشعر، الأسنان، وإشراقة البشرة.
+              عناية مغربية بمعايير عالمية. منتجات طبيعية آمنة ومفصّحة للشعر، الأسنان، وإشراقة البشرة.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ export function SiteFooter() {
 
         {/* Trust row */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-4 justify-center text-sm text-gray-400">
-          {["مرخّص SFDA", "حلال موثّق", "الدفع عند الاستلام", "ضمان صيدلية 30 يوم"].map((badge) => (
+          {["مكوّنات آمنة ومفصّحة", "الدفع عند الاستلام", "توصيل داخل المغرب", "ضمان ذهبي 30 يوم"].map((badge) => (
             <span key={badge} className="flex items-center gap-1">
               <span className="text-brand-gold">✓</span> {badge}
             </span>
@@ -73,7 +73,7 @@ export function SiteFooter() {
         </div>
 
         <p className="mt-8 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} سَنَدي mysanad — جميع الحقوق محفوظة
+          © {new Date().getFullYear()} فيرا بيوتي vevirabeauty — جميع الحقوق محفوظة
         </p>
       </div>
     </footer>

@@ -156,7 +156,7 @@ export function CheckoutModal() {
           </div>
           <h2 className="text-2xl font-extrabold text-brand-charcoal mb-3">تم استلام طلبك بنجاح!</h2>
           <p className="text-base text-brand-gray mb-8 leading-relaxed">
-            شكراً لثقتك بسَنَدي. سيتواصل معك فريقنا قريباً لتأكيد الطلب قبل الشحن. يرجى التأكد من أن رقمك متاح.
+            شكراً لثقتك بفيرا بيوتي. سيتواصل معك فريقنا قريباً لتأكيد الطلب قبل الشحن. يرجى التأكد من أن رقمك متاح.
           </p>
           <div className="bg-gray-50 border border-gray-100 rounded-2xl p-5 mb-6 text-right space-y-3">
             {orderItems.length > 0 && (
