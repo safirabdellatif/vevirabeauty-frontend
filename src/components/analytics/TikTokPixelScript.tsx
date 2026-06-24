@@ -2,7 +2,7 @@ import Script from "next/script";
 import { TIKTOK_PIXEL_ID, TIKTOK_PIXEL_ID_OLD } from "@/config/pixels";
 
 export function TikTokPixelScript() {
-  if (!TIKTOK_PIXEL_ID) return null;
+  if (!TIKTOK_PIXEL_ID && !TIKTOK_PIXEL_ID_OLD) return null;
 
   return (
     <Script id="tiktok-pixel" strategy="afterInteractive">
@@ -12,70 +12,9 @@ export function TikTokPixelScript() {
   ttq.load('${TIKTOK_PIXEL_ID}');
   ttq.load('${TIKTOK_PIXEL_ID_OLD}');
   ttq.page();
-}(window, document, 'ttq');
-
-// Patch ttq.track to fix Event Builder Purchase events missing required parameters
-(function patchTTQ() {
-  var attempts = 0;
-  var interval = setInterval(function() {
-    attempts++;
-    if (window.ttq && typeof window.ttq.track === 'function' && !window.ttq._sanadPatched) {
-      var orig = window.ttq.track.bind(window.ttq);
-      window.ttq.track = function(event, data, opts) {
-        if (event === 'Purchase') {
-          data = data || {};
-          if (!data.currency) data.currency = 'SAR';
-          if (!data.value || data.value === 0) {
-            var stored = window._sanadLastPurchaseValue;
-            if (stored) data.value = stored;
-          }
-          if (!data.contents || !data.contents.length) {
-            var storedContents = window._sanadLastPurchaseContents;
-            if (storedContents) data.contents = storedContents;
-          }
-        }
-        return orig(event, data, opts);
-      };
-      window.ttq._sanadPatched = true;
-      clearInterval(interval);
-    }
-    if (attempts > 50) clearInterval(interval);
-  }, 200);
-})();
-      `}
-    </Script>
-  );
-}
-
-
-// Patch ttq.track to fix Event Builder Purchase events missing required parameters
-(function patchTTQ() {
-  var attempts = 0;
-  var interval = setInterval(function() {
-    attempts++;
-    if (window.ttq && typeof window.ttq.track === 'function' && !window.ttq._sanadPatched) {
-      var orig = window.ttq.track.bind(window.ttq);
-      window.ttq.track = function(event, data, opts) {
-        if (event === 'Purchase') {
-          data = data || {};
-          if (!data.currency) data.currency = 'SAR';
-          if (!data.value || data.value === 0) {
-            var stored = window._sanadLastPurchaseValue;
-            if (stored) data.value = stored;
-          }
-          if (!data.contents || !data.contents.length) {
-            var storedContents = window._sanadLastPurchaseContents;
-            if (storedContents) data.contents = storedContents;
-          }
-        }
-        return orig(event, data, opts);
-      };
-      window.ttq._sanadPatched = true;
-      clearInterval(interval);
-    }
-    if (attempts > 50) clearInterval(interval);
-  }, 200);
-})();
+}(window, document, 
+'ttq'
+);
       `}
     </Script>
   );
