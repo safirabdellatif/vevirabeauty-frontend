@@ -317,7 +317,7 @@ export function CheckoutModal() {
                     id="phone"
                     type="tel"
                     autoComplete="tel"
-                    placeholder="05XXXXXXXX"
+                    placeholder="06XXXXXXXX"
                     dir="ltr"
                     className="w-full border-2 border-gray-200 rounded-xl px-4 py-3.5 text-brand-charcoal focus:border-brand-teal focus:ring-4 focus:ring-brand-teal/10 focus:outline-none transition-all text-base text-right"
                     {...register("phone")}
