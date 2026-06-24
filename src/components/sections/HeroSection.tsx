@@ -38,7 +38,7 @@ export function HeroSection({
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Star key={i} className="w-4 h-4 fill-brand-gold" />
                 ))}
-                <span className="text-sm font-bold text-brand-charcoal mr-1">+4.8 تقييم في السعودية</span>
+                <span className="text-sm font-bold text-brand-charcoal mr-1">+4.8 تقييم في المغرب</span>
               </div>
               <span className="text-xs text-green-700 bg-green-100 px-3 py-1 rounded-full font-bold flex items-center gap-1 border border-green-200">
                 <ShieldCheck className="w-4 h-4" /> حلال ومكوّنات واضحة

@@ -26,7 +26,7 @@ const schema = z.object({
     .refine((v) => !/^\d+$/.test(v), "الاسم لا يمكن أن يكون أرقامًا فقط"),
   phone: z
     .string()
-    .refine(isValidSaudiPhone, "فضلاً أدخلي رقم جوال سعودي صحيح"),
+    .refine(isValidSaudiPhone, "فضلاً أدخلي رقم هاتف مغربي صحيح (06 أو 07)"),
   email: z
     .string()
     .email("البريد الإلكتروني غير صحيح")

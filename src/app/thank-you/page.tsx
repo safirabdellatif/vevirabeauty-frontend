@@ -52,12 +52,12 @@ export default function ThankYouPage({
 
         {/* Next steps */}
         <div className="bg-brand-mint/40 rounded-3xl p-8 text-right mb-8 border border-brand-mint">
-          <h2 className="font-extrabold text-brand-charcoal mb-6 text-center text-xl">وش بيصير الحين؟</h2>
+          <h2 className="font-extrabold text-brand-charcoal mb-6 text-center text-xl">ماذا سيحدث بعد ذلك؟</h2>
           <div className="space-y-6">
             {[
-              { icon: PhoneCall, title: "مكالمة التأكيد", text: "بنتواصل معك قريبًا لتأكيد طلبك وتفاصيل عنوانك." },
-              { icon: ShieldCheck, title: "خلي جوالك قريب", text: "بدون تأكيدك ما راح نقدر نشحن الطلب، تأكدي إن الرقم متاح." },
-              { icon: Truck, title: "توصيل سريع", text: "بمجرد التأكيد، بنشحن طلبك ليوصلك خلال 2-4 أيام عمل. والدفع عند الاستلام!" },
+              { icon: PhoneCall, title: "مكالمة التأكيد", text: "سنتواصل معك قريبًا لتأكيد طلبك وتفاصيل عنوانك." },
+              { icon: ShieldCheck, title: "احتفظي بهاتفك قريبا", text: "بدون تأكيدك لن نتمكن من شحن الطلب، تأكدي إن الرقم متاح." },
+              { icon: Truck, title: "توصيل سريع", text: "بمجرد التأكيد، سنشحن طلبك ليصلك خلال 2-4 أيام عمل داخل المغرب. والدفع عند الاستلام!" },
             ].map(({ icon: Icon, title, text }, i) => (
               <div key={i} className="flex items-start gap-4">
                 <div className="w-10 h-10 rounded-2xl bg-brand-teal flex items-center justify-center flex-shrink-0 shadow-md">
@@ -74,7 +74,7 @@ export default function ThankYouPage({
 
         {/* Trust badges */}
         <div className="flex flex-wrap justify-center gap-4 mb-10">
-          {["الدفع عند الاستلام", "توصيل آمن داخل السعودية", "مكونات مرخصة"].map((badge) => (
+          {["الدفع عند الاستلام", "توصيل آمن داخل المغرب", "مكونات حلال"].map((badge) => (
             <span
               key={badge}
               className="flex items-center gap-1.5 text-sm font-bold text-brand-charcoal bg-white border border-gray-100 shadow-sm px-4 py-2.5 rounded-full"

@@ -32,20 +32,20 @@ const API_BASE = "/api";
 const ADMIN_EVENTS_ENABLED = process.env.NEXT_PUBLIC_ENABLE_ADMIN_EVENTS !== "false";
 
 /**
- * Format Saudi phone numbers to international format
- * 0501234567 → +966501234567
- * 0551234567 → +966551234567
+ * Format Moroccan phone numbers to international format
+ * 0612345678 → +212612345678
+ * 0712345678 → +212712345678
  */
 function formatPhoneForPixel(phone?: string): string | undefined {
   if (!phone) return undefined;
   
   let normalized = phone.replace(/\D/g, ""); // Remove non-digits
   
-  // Convert 0-prefixed Saudi numbers to +966 format
-  if (normalized.startsWith("0") && normalized.length === 9) {
-    normalized = "966" + normalized.substring(1);
-  } else if (normalized.startsWith("0") && normalized.length === 10) {
-    normalized = "966" + normalized.substring(1);
+  // Convert 0-prefixed Moroccan numbers to +212 format
+  if (normalized.startsWith("0") && normalized.length === 10) {
+    normalized = "212" + normalized.substring(1);
+  } else if (normalized.startsWith("212") && normalized.length === 12) {
+    // already in 212 format
   }
   
   // Add + if not present

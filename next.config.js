@@ -3,7 +3,7 @@ const nextConfig = {
   // Force same-origin API even if Easypanel overrides the Dockerfile build arg.
   env: {
     NEXT_PUBLIC_API_BASE_URL: "/api",
-    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://mysanad.shop",
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || "https://vevirabeauty.com",
     // Always true — Easypanel was passing "false" at build time and stripping all pixel code.
     NEXT_PUBLIC_ENABLE_PIXELS: "true",
     NEXT_PUBLIC_SNAP_PIXEL_ID:

@@ -16,12 +16,12 @@ export default function HomePage() {
 
       <HeroSection
         heading="عناية بمعايير صيدلية — لا وعود، نتائج"
-        subheading="سَنَدي بيت عناية سعودي يختار لكِ تركيبات مدروسة بمعايير صيدلية: قطرات البيوتين والكولاجين للشعر، طقم تبييض الأسنان الاحترافي بضوء LED، وبودرة حليب الفراولة لنضارة وتفتيح البشرة. مرخّص، حلال، والدفع عند الاستلام."
+        subheading="فيرا بيوتي عناية مغربية تختار لكِ تركيبات مدروسة بمعايير صيدلية: قطرات البيوتين والكولاجين للشعر، طقم تبييض الأسنان الاحترافي بضوء LED، وبودرة حليب الفراولة لنضارة وتفتيح البشرة. حلال، مكوّنات واضحة، والدفع عند الاستلام داخل المغرب."
         primaryCTA={{ label: "تصفّح التركيبات", href: "/products" }}
         secondaryCTA={{ label: "معاييرنا الصيدلية", href: "/about" }}
       />
 
-      {/* Pain empathy - Emotional connection for KSA women */}
+      {/* Pain empathy - Emotional connection for Moroccan women */}
       <section className="section-padding bg-brand-charcoal text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-teal via-transparent to-transparent"></div>
         <div className="container-max max-w-4xl mx-auto text-center relative z-10">
@@ -32,12 +32,12 @@ export default function HomePage() {
           <p className="text-gray-300 leading-relaxed text-lg md:text-xl mb-8">
             قطرات تشربينها، بودرة تذوب في حليبك، طقم يلامس أسنانك.. هذي ليست مستحضرات سطحية، بل تركيبات تستحق مراجعة دقيقة قبل أن تصل إليكِ.
             <br className="hidden md:block mt-2" />
-            في <span className="text-brand-mint font-bold">سَنَدي</span> نختار كل تركيبة بعقلية صيدلية مرخّصة: مكوّنات مفصّحة، جرعات واضحة، مطابقة لمعايير هيئة الغذاء والدواء — بلا مبالغات.
+            في <span className="text-brand-mint font-bold">فيرا بيوتي</span> نختار كل تركيبة بعقلية صيدلية: مكوّنات مفصّحة، جرعات واضحة، معايير صيدلانية دولية — بلا مبالغات.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2">
               <ShieldCheck className="w-5 h-5 text-brand-mint" />
-              <span className="font-medium">مرخّص من SFDA</span>
+              <span className="font-medium">مكوّنات آمنة ومفصّحة</span>
             </div>
             <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2">
               <Heart className="w-5 h-5 text-brand-mint" />
@@ -63,8 +63,8 @@ export default function HomePage() {
               <div className="w-20 h-20 rounded-full bg-white shadow-soft flex items-center justify-center">
                 <ShieldCheck className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="font-bold text-brand-charcoal text-xl">ترخيص SFDA</h3>
-              <p className="text-sm text-brand-gray">جميع المكوّنات مفصّحة ومطابقة لمواصفات هيئة الغذاء والدواء السعودية — نفس المعايير التي تتبعها الصيدليات الموثوقة في المملكة.</p>
+              <h3 className="font-bold text-brand-charcoal text-xl">معايير صيدلانية دولية</h3>
+              <p className="text-sm text-brand-gray">جميع المكوّنات مفصّحة ومطابقة لمواصفات صيدلانية دولية — نفس المعايير التي تتبعها الصيدليات الموثوقة.</p>
             </div>
             <div className="hidden md:block w-px h-24 bg-gray-200"></div>
             <div className="flex flex-col items-center gap-3 max-w-xs">

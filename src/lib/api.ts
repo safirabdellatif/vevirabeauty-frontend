@@ -12,7 +12,7 @@ export interface CreateOrderPayload {
   cart: {
     items: CartItem[];
     total: number;
-    currency: "SAR";
+    currency: "MAD";
   };
   attribution: Attribution;
   analytics: {
