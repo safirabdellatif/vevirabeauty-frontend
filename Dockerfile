@@ -6,6 +6,9 @@ RUN npm ci
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+# Cache buster — forces rebuild when GIT_SHA changes
+ARG GIT_SHA=unknown
+RUN echo "Building commit $GIT_SHA"
 COPY . .
 
 ARG NEXT_PUBLIC_API_BASE_URL=/api
