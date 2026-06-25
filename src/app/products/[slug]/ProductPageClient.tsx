@@ -56,16 +56,16 @@ const USAGE_PROTOCOL: Record<string, UsageProtocol> = {
       {
         icon: Droplets,
         title: "ضع كمية صغيرة",
-        body: "Pour 3–5 gouttes dans la paume, réchauffer puis masser la zone douloureuse 2–3 minutes.",
+        body: "ضع 3–5 قطرات في راحة اليد، دفّئ الزيت ثم دلّك المنطقة المؤلمة 2–3 دقائق.",
       },
       {
         icon: HeartHandshake,
         title: "دلّك بلطف",
-        body: "Mouvements circulaires jusqu'à absorption — genoux, dos, épaules ou cou.",
+        body: "حركات دائرية لطيفة حتى الامتصاص — مناسب للركبة، الظهر، الكتف أو الرقبة.",
       },
     ],
-    tips: ["Usage externe.", "Laver les mains après.", "Conserver au sec."],
-    warnings: ["Ne pas appliquer sur peau lésée.", "Consulter un médecin si douleur persiste."],
+    tips: ["للاستخدام الخارجي فقط.", "اغسل يديك بعد التطبيق.", "احفظ المنتج في مكان جاف."],
+    warnings: ["لا تُطبّق على جلد مجروح أو متهيّج.", "استشر الطبيب إذا استمر الألم."],
   },
   hair_loss_spray: {
     dose: "5–8 رشّات",
@@ -75,16 +75,16 @@ const USAGE_PROTOCOL: Record<string, UsageProtocol> = {
       {
         icon: Droplets,
         title: "فروة رأس نظيفة",
-        body: "Appliquer sur cuir chevelu sec ou légèrement humide.",
+        body: "طبّق على فروة رأس نظيفة وجافة أو رطبة قليلًا.",
       },
       {
         icon: Clock,
         title: "رشّ على الجذور",
-        body: "Vaporiser sur le cuir chevelu et masser 1–2 minutes sans rincer.",
+        body: "رشّ على فروة الرأس ودلّك 1–2 دقيقة دون شطف.",
       },
     ],
-    tips: ["Ne pas laver immédiatement après.", "La régularité est essentielle."],
-    warnings: ["Éviter les yeux.", "Arrêter en cas d'irritation."],
+    tips: ["لا تغسل شعرك مباشرة بعد الاستخدام.", "الانتظام هو سر النتائج."],
+    warnings: ["تجنّب ملامسة العينين.", "أوقف الاستخدام عند ظهور تهيّج."],
   },
   melasma_cream: {
     dose: "طبقة رقيقة",
@@ -94,16 +94,16 @@ const USAGE_PROTOCOL: Record<string, UsageProtocol> = {
       {
         icon: Smile,
         title: "بشرة نظيفة",
-        body: "Appliquer une fine couche sur les zones sombres.",
+        body: "ضع طبقة رقيقة على المناطق الداكنة بعد تنظيف البشرة.",
       },
       {
         icon: Shield,
         title: "واقي شمس نهارًا",
-        body: "Toujours utiliser un SPF le matin.",
+        body: "استخدم واقي شمس كل صباح لحماية أفضل.",
       },
     ],
-    tips: ["Résultats progressifs.", "Éviter le soleil direct."],
-    warnings: ["Éviter le contour des yeux.", "Dermatologue si melasma sévère."],
+    tips: ["النتائج تظهر تدريجيًا مع الاستمرار.", "تجنّب التعرّض المباشر للشمس."],
+    warnings: ["تجنّب منطقة حول العينين.", "راجع طبيب الجلد إذا كان الكلف شديدًا."],
   },
 };
 
