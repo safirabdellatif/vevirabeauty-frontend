@@ -204,7 +204,6 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 <p className="text-base font-bold text-brand-charcoal mb-4">اختر العرض المناسب لك:</p>
                 <OfferSelector
                   offers={product.offers}
-                  collapsible
                   onOfferChange={setSelectedOffer}
                 />
               </div>
