@@ -24,17 +24,14 @@ export function SiteHeader() {
         <div className="container-max flex items-center justify-between h-16">
           {/* Brand */}
           <Link href="/" className="flex items-center gap-3">
-            <span className="flex items-center justify-center w-10 h-10 rounded-2xl bg-brand-teal shadow-soft ring-1 ring-brand-mint">
-              <img
-                src="/brand-mark-light.png"
-                alt=""
-                aria-hidden="true"
-                className="h-7 w-7 object-contain"
-              />
-            </span>
+            <img
+              src="/logo.png"
+              alt="فيرا بيوتي"
+              className="h-11 w-11 object-contain"
+            />
             <span className="flex flex-col leading-none">
               <span className="text-xl font-bold text-brand-teal tracking-tight">فيرا بيوتي</span>
-              <span className="text-xs text-brand-gray font-sans">vevirabeauty</span>
+              <span className="text-xs text-brand-gray font-sans">Vevira Beauty</span>
             </span>
           </Link>
 

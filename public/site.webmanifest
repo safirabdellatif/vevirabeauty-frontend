@@ -1,11 +1,11 @@
 {
-  "name": "سَنَدي",
-  "short_name": "mysanad",
-  "description": "Pharmacy-grade beauty and care from MySanad.",
+  "name": "فيرا بيوتي",
+  "short_name": "Vevira",
+  "description": "Vevira Beauty — natural care products for Morocco.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAFBF9",
-  "theme_color": "#0A4D4A",
+  "background_color": "#FFF9F0",
+  "theme_color": "#0F5F5C",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

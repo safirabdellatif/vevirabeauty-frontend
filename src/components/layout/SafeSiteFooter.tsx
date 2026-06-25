@@ -9,22 +9,18 @@ export function SafeSiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="flex items-center justify-center w-10 h-10 rounded-2xl bg-brand-teal ring-1 ring-white/10">
-                <img
-                  src="/brand-mark-light.png"
-                  alt=""
-                  aria-hidden="true"
-                  className="h-7 w-7 object-contain"
-                />
-              </span>
+              <img
+                src="/logo.png"
+                alt="فيرا بيوتي"
+                className="h-11 w-11 object-contain"
+              />
               <span className="flex flex-col leading-none">
                 <span className="text-xl font-bold text-white">فيرا بيوتي</span>
-                <span className="text-xs text-brand-gray font-sans">vevirabeauty</span>
+                <span className="text-xs text-brand-gray font-sans">Vevira Beauty</span>
               </span>
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
-              متجر سعودي للتسوق أونلاين. دفع عند الاستلام، توصيل داخل المملكة، وخدمة
-              عملاء جاهزة للمساعدة.
+              متجر مغربي للعناية الطبيعية. دفع عند الاستلام وتوصيل لجميع المدن.
             </p>
           </div>
 

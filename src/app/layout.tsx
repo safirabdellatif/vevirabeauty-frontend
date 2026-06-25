@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     siteName: "فيرا بيوتي",
     locale: "ar_MA",
     type: "website",
+    images: [{ url: "/og-image.png", width: 1200, height: 1200, alt: "Vevira Beauty" }],
   },
   manifest: "/site.webmanifest",
   icons: {

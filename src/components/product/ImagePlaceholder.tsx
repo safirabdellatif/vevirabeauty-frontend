@@ -25,8 +25,8 @@ export function ImagePlaceholder({
         <div className="w-full h-full bg-[radial-gradient(circle_at_30%_40%,#0F5F5C_0%,transparent_60%)]" />
       </div>
       {showBrand && (
-        <div className="w-16 h-16 rounded-full bg-brand-teal/20 flex items-center justify-center mb-3">
-          <span className="text-brand-teal font-bold text-2xl font-sans">N</span>
+        <div className="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center mb-3 shadow-soft p-2">
+          <img src="/logo.png" alt="Vevira" className="h-full w-full object-contain" />
         </div>
       )}
       <p className="text-sm font-medium text-brand-teal text-center px-4">{label}</p>
