@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Star, ShoppingBag, ShieldCheck, ChevronLeft, Award, CheckCircle2, HeartHandshake, Shield, Truck, Clock, Droplets, Coffee, Smile, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import type { Product, ProductOffer } from "@/content/products";
-import { PRODUCTS } from "@/content/products";
 import { useCartStore } from "@/stores/cart-store";
 import { OfferSelector } from "@/components/product/OfferSelector";
 import { StickyProductCTA } from "@/components/product/StickyProductCTA";
@@ -110,17 +109,16 @@ const USAGE_PROTOCOL: Record<string, UsageProtocol> = {
 
 export function ProductPageClient({ product }: ProductPageClientProps) {
   const { addItem, openCart } = useCartStore();
-  const defaultOffer = product.offers.find((o) => o.defaultSelected) ?? product.offers[0];
-  const [selectedOffer, setSelectedOffer] = useState<ProductOffer>(defaultOffer);
+  const [selectedOffer, setSelectedOffer] = useState<ProductOffer>(product.offers[0]);
   const [showSticky, setShowSticky] = useState(false);
-  const [activeImage, setActiveImage] = useState(product.mainImage ?? "");
+  const heroImage = product.mainImage ?? "";
 
   useEffect(() => {
     trackViewContent(product.id, selectedOffer.price);
     const handleScroll = () => setShowSticky(window.scrollY > 400);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [product.id]);
+  }, [product.id, selectedOffer.price]);
 
   const handleAddToCart = () => {
     const eventId = generateEventId("AddToCart");
@@ -201,11 +199,12 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 ))}
               </ul>
 
-              {/* Offer Selector */}
+              {/* Offers — 199 MAD first, others on click */}
               <div className="mb-6 bg-brand-sand/30 p-5 rounded-2xl border border-brand-sand">
                 <p className="text-base font-bold text-brand-charcoal mb-4">اختر العرض المناسب لك:</p>
                 <OfferSelector
                   offers={product.offers}
+                  collapsible
                   onOfferChange={setSelectedOffer}
                 />
               </div>
@@ -246,11 +245,11 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 <span className="font-bold text-sm text-brand-charcoal">ضمان 30 يوم</span>
               </div>
               
-              {activeImage ? (
-                <div className="relative h-80 md:h-[500px] rounded-3xl mb-4 shadow-card bg-gradient-to-b from-brand-sand/30 to-white overflow-hidden">
+              {heroImage ? (
+                <div className="relative h-80 md:h-[500px] rounded-3xl shadow-card bg-gradient-to-b from-brand-sand/30 to-white overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={activeImage}
+                    src={heroImage}
                     alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
                     className="h-full w-full object-contain object-center p-2"
                   />
@@ -259,39 +258,9 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 <ImagePlaceholder
                   label={product.imagePlaceholders[0]?.label ?? "صورة المنتج"}
                   alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-                  className="h-80 md:h-[500px] rounded-3xl mb-4 shadow-card"
+                  className="h-80 md:h-[500px] rounded-3xl shadow-card"
                 />
               )}
-              <div className="grid grid-cols-3 gap-3">
-                {(product.galleryImages?.length
-                  ? [{ src: product.mainImage ?? "", alt: product.imagePlaceholders[0]?.alt ?? product.nameAr }, ...product.galleryImages]
-                  : []
-                ).map((img, i) =>
-                  img.src ? (
-                    <button
-                      key={i}
-                      type="button"
-                      onClick={() => setActiveImage(img.src)}
-                      className={`h-28 rounded-2xl overflow-hidden shadow-soft transition-all ${
-                        activeImage === img.src ? "ring-2 ring-brand-teal" : "hover:opacity-90"
-                      }`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={img.src} alt={img.alt} className="h-full w-full object-cover object-center" />
-                    </button>
-                  ) : null
-                )}
-                {!product.galleryImages?.length &&
-                  product.imagePlaceholders.slice(1, 4).map((img, i) => (
-                    <ImagePlaceholder
-                      key={i}
-                      label={img.label}
-                      alt={img.alt}
-                      className="h-28 rounded-2xl hover:opacity-90 transition-opacity cursor-pointer shadow-soft"
-                      showBrand={false}
-                    />
-                  ))}
-              </div>
             </motion.div>
           </div>
         </div>
@@ -572,71 +541,6 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 <img src={item.src} alt={item.alt} className="h-full w-full object-cover object-center" />
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Second offer CTA - High Conversion */}
-      <section className="section-padding bg-brand-teal text-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="container-max max-w-2xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full text-sm font-bold mb-6">
-            <Clock className="w-4 h-4" />
-            <span>الكمية محدودة - اطلب قبل نفاذ المخزون</span>
-          </div>
-          
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">{product.heroHeadline}</h2>
-          <p className="text-brand-mint text-lg mb-8">ابدأ روتين ثقتك اليوم، إطلالتك تستاهل.</p>
-          
-          <div className="flex flex-col gap-4 mb-8">
-            {product.offers.map((offer) => {
-              const isDefault = offer.defaultSelected;
-              return (
-                <div
-                  key={offer.quantity}
-                  className={`rounded-2xl p-5 flex justify-between items-center border-2 transition-all cursor-pointer ${
-                    isDefault 
-                      ? "bg-white text-brand-teal border-white shadow-xl transform scale-105" 
-                      : "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                  }`}
-                  onClick={() => setSelectedOffer(offer)}
-                >
-                  <div className="text-right">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-extrabold text-lg">{offer.label}</span>
-                      {offer.badge && (
-                        <span className={`text-xs px-2 py-1 rounded-full font-bold ${isDefault ? "bg-brand-teal text-white" : "bg-white/20 text-white"}`}>
-                          {offer.badge}
-                        </span>
-                      )}
-                    </div>
-                    {isDefault && <p className="text-sm text-brand-gray font-medium">ابدأ بقطعة وجرّب النتيجة</p>}
-                  </div>
-                  <div className="text-left">
-                    <span className="font-extrabold text-2xl block">{formatSARCompact(offer.price)}</span>
-                    {offer.quantity > 1 && (
-                      <span className={`text-xs font-bold ${isDefault ? "text-green-600" : "text-brand-mint"}`}>
-                        توفير رائع!
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          <button
-            onClick={handleAddToCart}
-            className="bg-brand-gold text-brand-charcoal font-extrabold py-5 rounded-2xl hover:bg-yellow-400 transition-colors w-full text-lg flex items-center justify-center gap-3 shadow-xl transform hover:-translate-y-1"
-          >
-            <ShoppingBag className="w-6 h-6" />
-            أضف للسلة الآن — الدفع عند الاستلام
-          </button>
-          
-          <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm font-medium text-brand-mint">
-            <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4" /> ضمان 30 يوم</span>
-            <span className="flex items-center gap-1"><Truck className="w-4 h-4" /> توصيل سريع</span>
-            <span className="flex items-center gap-1"><CheckCircle2 className="w-4 h-4" /> تأكيد قبل الشحن</span>
           </div>
         </div>
       </section>

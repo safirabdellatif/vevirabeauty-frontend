@@ -153,7 +153,6 @@ export function CheckoutModal() {
                   <div key={item.productId} className="flex justify-between gap-4 text-sm">
                     <span className="font-bold text-brand-charcoal">
                       {item.productName}
-                      {item.quantity > 1 ? ` × ${item.quantity}` : ""}
                     </span>
                     <span className="font-extrabold text-brand-teal">{formatSARCompact(item.price)}</span>
                   </div>

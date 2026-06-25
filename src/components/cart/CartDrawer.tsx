@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, Trash2, ShieldCheck, Truck, Clock } from "lucide-react";
 import { useCartStore } from "@/stores/cart-store";
 import { useCheckoutStore } from "@/stores/checkout-store";
-import { PRODUCTS, CROSS_SELL_REASONS, type ProductId } from "@/content/products";
+import type { ProductId } from "@/content/products";
 import { formatSARCompact } from "@/lib/money";
 import { ProductThumbnail } from "@/components/product/ProductThumbnail";
-import { CartCrossSellCard } from "./CartCrossSellCard";
 import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 
 interface CartDrawerProps {
@@ -30,15 +29,6 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [isOpen, onClose]);
-
-  // Compute cross-sells: products not in cart
-  const cartProductIds = items.map((i) => i.productId as ProductId);
-  const primaryProductId = cartProductIds[0];
-  const crossSellIds = primaryProductId
-    ? (PRODUCTS[primaryProductId]?.crossSellProductIds ?? []).filter(
-        (id) => !cartProductIds.includes(id)
-      )
-    : [];
 
   const total = totalPrice();
 
@@ -124,7 +114,6 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         />
                         <div className="flex-1 min-w-0">
                           <p className="font-bold text-sm text-brand-charcoal">{item.productName}</p>
-                          <p className="text-xs font-medium text-brand-teal mt-1">{item.offerLabel}</p>
                           {item.source === "upsell" && (
                             <span className="text-[10px] font-bold bg-brand-gold/20 text-brand-gold px-2 py-0.5 rounded-full mt-1.5 inline-block">
                               عرض خاص
@@ -144,24 +133,6 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </div>
                     ))}
 
-                    {/* Cross-sells */}
-                    {crossSellIds.length > 0 && (
-                      <div className="pt-4">
-                        <p className="text-sm font-bold text-brand-charcoal mb-3 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-brand-gold"></span>
-                          منتجات تكمل إطلالتك
-                        </p>
-                        <div className="space-y-3">
-                          {crossSellIds.map((id) => (
-                            <CartCrossSellCard
-                              key={id}
-                              productId={id}
-                              reason={CROSS_SELL_REASONS[primaryProductId]?.[id] ?? ""}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </>
                 )}
               </div>

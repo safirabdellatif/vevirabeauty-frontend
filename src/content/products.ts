@@ -60,7 +60,7 @@ export interface Product {
 
 export const OFFERS: ProductOffer[] = [
   { quantity: 1, price: 199, label: "قطعة واحدة", badge: "للتجربة" },
-  { quantity: 2, price: 289, label: "قطعتان", badge: "الأكثر طلبًا", defaultSelected: true },
+  { quantity: 2, price: 289, label: "قطعتان", badge: "الأكثر طلبًا" },
   { quantity: 3, price: 369, label: "3 قطع", badge: "أفضل قيمة" },
 ];
 
