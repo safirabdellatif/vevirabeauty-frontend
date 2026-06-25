@@ -1,9 +1,24 @@
 const ROWS = [
-  { generic: "اسم غير واضح ومصدر غير معروف", vevira: "علامة مغربية واضحة وتجربة طلب منظمة" },
-  { generic: "مكوّنات مجهولة وادعاءات مبالغ فيها", vevira: "مكوّنات طبيعية مفصّحة لكل منتج" },
-  { generic: "لا يوجد تأكيد واضح قبل التوصيل", vevira: "تأكيد طلب بالهاتف قبل الإرسال" },
-  { generic: "وصف عام", vevira: "كل منتج يحل مشكلة واحدة بوضوح" },
-  { generic: "دعم غير واضح", vevira: "تواصل ودعم بالعربية داخل المغرب" },
+  {
+    generic: "سمية ما واضحة والمصدر ما معروفش",
+    vevira: "علامة مغربية واضحة وتجربة طلب مرتبة",
+  },
+  {
+    generic: "مكوّنات ما مفهوماش وادعاءات كبار بزاف",
+    vevira: "مكوّنات طبيعية مبينة لكل منتج",
+  },
+  {
+    generic: "ما كاينش تأكيد قبل ما يوصلك الطلب",
+    vevira: "كيتصلو بيك قبل ما يصيفطو",
+  },
+  {
+    generic: "وصف عام ما كيفيدش",
+    vevira: "كل منتج كيحل مشكل واحد بوضوح",
+  },
+  {
+    generic: "الدعم والتواصل ما واضحينش",
+    vevira: "تواصل ودعم بالعربية فالمغرب كامل",
+  },
 ];
 
 export function ComparisonCards() {
@@ -12,9 +27,9 @@ export function ComparisonCards() {
       <table className="w-full min-w-[600px] border-collapse">
         <thead>
           <tr className="border-b-2 border-brand-teal/20">
-            <th className="text-right p-4 text-brand-gray font-medium">منتجات عشوائية</th>
+            <th className="text-right p-4 text-brand-gray font-medium">منتجات من أي بلاصة</th>
             <th className="text-right p-4 text-brand-teal font-bold bg-brand-mint/50 rounded-t-2xl">
-              منتجات فيرا بيوتي
+              فيرا بيوتي
             </th>
           </tr>
         </thead>

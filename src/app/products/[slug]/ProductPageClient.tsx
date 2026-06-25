@@ -548,9 +548,9 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
       <section className="section-padding bg-gray-50">
         <div className="container-max">
           <div className="text-center mb-12">
-            <span className="text-brand-teal font-bold text-sm tracking-wider mb-2 block">الفرق واضح</span>
+            <span className="text-brand-teal font-bold text-sm tracking-wider mb-2 block">الفرق باين</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-charcoal mb-4">
-              ليش فيرا بيوتي مو أي منتج عادي؟
+              علاش فيرا بيوتي ماشي أي منتج عادي؟
             </h2>
           </div>
           <ComparisonCards />

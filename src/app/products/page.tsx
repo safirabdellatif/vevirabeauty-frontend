@@ -61,7 +61,7 @@ export default function ProductsPage() {
       <section className="section-padding">
         <div className="container-max">
           <h2 className="text-2xl font-bold text-brand-charcoal mb-8 text-center">
-            فيرا بيوتي مقارنةً بالمنتجات العشوائية
+            فيرا بيوتي مقابل المنتجات العشوائية
           </h2>
           <ComparisonCards />
         </div>

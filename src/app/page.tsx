@@ -105,8 +105,8 @@ export default function HomePage() {
       <section className="section-padding bg-brand-mint">
         <div className="container-max">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-charcoal">ليش فيرا بيوتي؟</h2>
-            <p className="text-brand-gray text-lg mt-3">لأننا نركّز على النتيجة، لا على القائمة</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-charcoal">علاش فيرا بيوتي؟</h2>
+            <p className="text-brand-gray text-lg mt-3">حيت كنركزو على النتيجة، ماشي على القائمة الطويلة</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
