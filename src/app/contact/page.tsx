@@ -67,7 +67,7 @@ export default function ContactPage() {
               <label className="block text-sm font-semibold text-brand-charcoal mb-1">رقم الجوال</label>
               <input
                 type="tel"
-                placeholder="05XXXXXXXX"
+                placeholder="06XXXXXXXX"
                 dir="ltr"
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-brand-charcoal focus:border-brand-teal focus:outline-none transition-colors text-right"
               />
@@ -86,7 +86,7 @@ export default function ContactPage() {
 
         <div className="mt-8 bg-brand-mint rounded-2xl p-5">
           <p className="text-sm text-brand-gray">
-            <span className="font-semibold text-brand-charcoal">ساعات الدعم:</span> أيام الأسبوع من 9 صباحًا حتى 10 مساءً (بتوقيت الرياض)
+            <span className="font-semibold text-brand-charcoal">ساعات الدعم:</span> أيام الأسبوع من 9 صباحًا حتى 10 مساءً (بتوقيت الدار البيضاء)
           </p>
           <p className="text-sm text-brand-gray mt-2">
             سيتم التواصل معك لتأكيد الطلب قبل الشحن في حال قدّمت طلبًا.

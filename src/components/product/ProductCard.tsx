@@ -45,7 +45,7 @@ export function ProductCard({ product, showCTA = true }: ProductCardProps) {
             <span className="text-xs font-bold text-brand-charcoal mr-1">+4.8</span>
           </div>
           <span className="text-[10px] font-bold text-green-700 bg-green-50 px-2 py-1 rounded-full border border-green-100">
-            حلال
+            طبيعي
           </span>
         </div>
 

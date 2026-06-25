@@ -6,7 +6,7 @@ import { Star, Truck, ShieldCheck, Clock3 } from "lucide-react";
 export const metadata: Metadata = {
   title: "تسوق بثقة",
   description:
-    "متجر سعودي للتسوق أونلاين. دفع عند الاستلام، توصيل داخل المملكة، وخدمة عملاء جاهزة للمساعدة.",
+    "متجر مغربي للتسوق أونلاين. دفع عند الاستلام، توصيل داخل المغرب، وخدمة عملاء جاهزة للمساعدة.",
   robots: { index: false, follow: false },
 };
 
@@ -16,7 +16,7 @@ export default function LpPage() {
       <section className="container-max py-16 md:py-24">
         <div className="max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-teal">
-            vevirabeauty.shop
+            vevirabeauty.com
           </p>
           <h1 className="mt-4 text-4xl md:text-5xl font-bold text-brand-charcoal leading-tight">
             تسوقي براحة… وادفعي عند الاستلام

@@ -17,7 +17,7 @@ interface TrustStripProps {
 export function TrustStrip({ variant = "light" }: TrustStripProps) {
   // Adding warranty to the badges if not present
   const badges = [
-    { label: "ضمان صيدلية 30 يوم", icon: "award" as const },
+    { label: "ضمان 30 يوم", icon: "award" as const },
     ...SITE.trustBadges,
   ];
 

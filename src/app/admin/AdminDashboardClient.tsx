@@ -189,7 +189,7 @@ export function AdminDashboardClient() {
 
   const cards = [
     {
-      label: "Valid KSA visitors",
+      label: "Valid Morocco visitors",
       value: number(metrics?.visitors),
       sub: `${number(metrics?.page_views)} page views`,
       icon: Users,
@@ -265,7 +265,7 @@ export function AdminDashboardClient() {
             <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-gold text-brand-dark">
               <Lock className="h-7 w-7" />
             </div>
-            <p className="text-sm uppercase tracking-[0.3em] text-brand-mint">MySanad Admin</p>
+            <p className="text-sm uppercase tracking-[0.3em] text-brand-mint">Vevira Admin</p>
             <h1 className="mt-3 text-3xl font-bold">Dashboard login</h1>
             <p className="mt-3 text-sm text-white/70">
               Use the username and password configured in the backend environment.
@@ -304,11 +304,11 @@ export function AdminDashboardClient() {
           <div>
             <div className="flex items-center gap-2 text-sm font-semibold text-brand-teal">
               <ShieldCheck className="h-4 w-4" />
-              Valid KSA traffic only
+              Valid Morocco traffic only
             </div>
             <h1 className="mt-2 text-3xl font-bold tracking-tight">Admin Dashboard</h1>
             <p className="mt-1 text-sm text-brand-gray">
-              Clicks, orders, conversion, revenue, and order previews filtered by MaxMind Saudi non-VPN checks.
+              Clicks, orders, conversion, revenue, and order previews filtered by MaxMind Morocco non-VPN checks.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">

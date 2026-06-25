@@ -14,7 +14,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold text-brand-charcoal mb-3">الدفع عند الاستلام (COD)</h2>
             <ul className="space-y-2">
-              <li>الدفع عند الاستلام متاح داخل المملكة العربية المغرب.</li>
+              <li>الدفع عند الاستلام متاح داخل المملكة المغربية.</li>
               <li>يتم التواصل مع العميلة لتأكيد الطلب قبل الشحن.</li>
               <li>قد يتم إلغاء الطلب إذا تعذر تأكيده أو كان الرقم غير صحيح.</li>
               <li>قد نستخدم أنظمة تحقق للحد من الطلبات الوهمية وحماية جودة الخدمة.</li>
@@ -24,7 +24,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold text-brand-charcoal mb-3">التوصيل</h2>
             <ul className="space-y-2">
-              <li>التوصيل داخل المملكة العربية المغرب.</li>
+              <li>التوصيل داخل المملكة المغربية.</li>
               <li>يتم تأكيد الطلب قبل الشحن.</li>
               <li>مدة التوصيل تعتمد على المدينة وشركة الشحن.</li>
             </ul>

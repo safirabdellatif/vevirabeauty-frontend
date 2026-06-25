@@ -60,7 +60,7 @@ export default function HomePage() {
               <div className="w-20 h-20 rounded-full bg-white shadow-soft flex items-center justify-center">
                 <ShieldCheck className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="font-bold text-brand-charcoal text-xl">جودة مختارة</h3>
+              <h3 className="font-bold text-brand-charcoal text-xl">تركيبات طبيعية</h3>
               <p className="text-sm text-brand-gray">كل منتج يحل مشكلة واحدة بوضوح — بدون حشو ولا ادعاءات مبالغ فيها.</p>
             </div>
             <div className="hidden md:block w-px h-24 bg-gray-200"></div>

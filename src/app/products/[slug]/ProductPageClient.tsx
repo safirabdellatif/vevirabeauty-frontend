@@ -273,7 +273,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               <div className="w-20 h-20 rounded-full bg-white shadow-soft flex items-center justify-center">
                 <ShieldCheck className="w-10 h-10 text-green-600" />
               </div>
-              <h3 className="font-bold text-brand-charcoal text-xl">مكوّنات مرخصة</h3>
+              <h3 className="font-bold text-brand-charcoal text-xl">مكوّنات طبيعية</h3>
               <p className="text-sm text-brand-gray">مكوّناتنا طبيعية ومفصّحة بوضوح لضمان أمانك التام.</p>
             </div>
             <div className="hidden md:block w-px h-24 bg-gray-200"></div>
@@ -386,7 +386,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               مكوّنات نشطة.. نتائج تلاحظينها
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              لا نعتمد على الوعود الفارغة. كل قطرة وكل مسحة تحتوي على تركيبة دقيقة ومصرحة من هيئة الغذاء والدواء، صُممت خصيصًا لتمنحكِ نتيجة فعلية ترافقكِ كل يوم.
+              لا نعتمد على الوعود الفارغة. كل قطرة وكل مسحة تحتوي على تركيبة طبيعية مفصّحة، صُممت لتمنحك نتيجة فعلية مع الاستمرار.
             </p>
           </div>
           
@@ -420,7 +420,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 نشرة الاستخدام
               </span>
               <h2 className="text-3xl md:text-4xl font-extrabold text-brand-charcoal mb-4">
-                كيفية الاستخدام — بمعايير صيدلية
+                كيفية الاستخدام — خطوات بسيطة
               </h2>
               <p className="text-brand-gray text-lg max-w-2xl mx-auto">
                 التزمي بهذا البروتوكول البسيط للحصول على نتائج فعلية مع الاستمرار.
