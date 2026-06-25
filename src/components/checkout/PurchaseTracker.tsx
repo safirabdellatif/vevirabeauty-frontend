@@ -30,26 +30,12 @@ export function PurchaseTracker({ orderNumber, total, items }: PurchaseTrackerPr
 
     // If no product IDs found, use a generic one
     if (productIds.length === 0) {
-      productIds = ["mysanad-product"];
+      productIds = ["vevira-product"];
     }
 
-    // Generate a purchase event ID
     const purchaseEventId = generateEventId("Purchase");
 
-    // Try to get customer email and phone from URL params or localStorage
-    const searchParams = new URLSearchParams(window.location.search);
-    const email = searchParams.get("email") || localStorage.getItem("customer_email") || undefined;
-    const phone = searchParams.get("phone") || localStorage.getItem("customer_phone") || undefined;
-
-    // Track the purchase
-    trackPurchase(
-      orderNumber,
-      purchaseEventId,
-      total,
-      productIds,
-      email ?? undefined,
-      phone ?? undefined
-    );
+    trackPurchase(orderNumber, purchaseEventId, total, productIds);
   }, [orderNumber, total, items]);
 
   return null;

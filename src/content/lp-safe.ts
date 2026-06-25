@@ -1,15 +1,26 @@
 /** Safe copy for /lp — no medical claims, Morocco cities */
 
-export const LP_SAFE_REVIEWS = [
+import type { Review } from "@/content/reviews";
+
+export const LP_SAFE_REVIEWS: Review[] = [
   {
-    author: "نورة — الدار البيضاء",
+    id: "lp-r1",
     text: "طلبت بسهولة والتوصيل كان سريع. الدفع عند الاستلام ريّحني.",
+    author: "نورة — الدار البيضاء",
+    rating: 5,
+    isPlaceholder: true,
   },
   {
-    author: "فاطمة — الرباط",
+    id: "lp-r2",
     text: "تجربة شراء واضحة، تأكيد قبل التوصيل، وخدمة بالعربية.",
+    author: "فاطمة — الرباط",
+    rating: 5,
+    isPlaceholder: true,
   },
 ];
+
+/** @deprecated use LP_SAFE_REVIEWS */
+export const LP_REVIEWS = LP_SAFE_REVIEWS;
 
 export const LP_RECENT_ORDERS = [
   { name: "فاطمة", city: "الدار البيضاء", minutesAgo: 6 },
@@ -18,3 +29,6 @@ export const LP_RECENT_ORDERS = [
   { name: "سارة", city: "طنجة", minutesAgo: 24 },
   { name: "خديجة", city: "فاس", minutesAgo: 31 },
 ];
+
+/** @deprecated use LP_RECENT_ORDERS */
+export const LP_FAKE_ACTIVITY = LP_RECENT_ORDERS;

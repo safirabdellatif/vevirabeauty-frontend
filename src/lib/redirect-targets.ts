@@ -14,3 +14,6 @@ export function buildAdRedirectUrl(slug: string, siteOrigin = "https://vevirabea
   const base = siteOrigin.replace(/\/$/, "");
   return `${base}/ads/${encodeURIComponent(slug)}`;
 }
+
+/** @deprecated use REDIRECT_TARGETS */
+export const REDIRECT_TARGET_OPTIONS = REDIRECT_TARGETS;

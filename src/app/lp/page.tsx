@@ -29,7 +29,7 @@ export default function LpPage() {
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {[
-            { icon: Truck, title: "توصيل داخل المملكة", body: "شحن سريع لمعظم المدن." },
+            { icon: Truck, title: "توصيل داخل المغرب", body: "شحن سريع لمعظم المدن." },
             { icon: ShieldCheck, title: "دفع عند الاستلام", body: "ادفعي عند استلام الطلب." },
             { icon: Clock3, title: "تأكيد سريع", body: "يتم تأكيد الطلب بعد الإرسال." },
           ].map(({ icon: Icon, title, body }) => (
