@@ -245,12 +245,16 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               </div>
               
               {heroImage ? (
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-card bg-white md:aspect-[16/10]">
+                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-3xl bg-white p-3 shadow-card md:aspect-[16/10] md:p-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={heroImage}
                     alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-                    className="h-full w-full object-cover object-center"
+                    className={
+                      product.id === "joint_pain_oil"
+                        ? "max-h-full max-w-full object-contain object-center scale-[0.92]"
+                        : "max-h-full max-w-full object-contain object-center"
+                    }
                   />
                 </div>
               ) : (

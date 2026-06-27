@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Star, ShieldCheck, Truck } from "lucide-react";
-import type { Product } from "@/content/products";
+import type { Product, ProductId } from "@/content/products";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { formatSARCompact } from "@/lib/money";
 
@@ -9,8 +9,17 @@ interface ProductCardProps {
   showCTA?: boolean;
 }
 
+/** Ajustements légers — huile : bouteille très grande dans l'image IA */
+const CARD_IMAGE_CLASS: Partial<Record<ProductId, string>> = {
+  joint_pain_oil:
+    "max-h-full max-w-full object-contain object-center scale-[0.92] transition-transform duration-300 group-hover:scale-[0.95]",
+};
+
 export function ProductCard({ product, showCTA = true }: ProductCardProps) {
   const defaultOffer = product.offers.find((o) => o.defaultSelected) ?? product.offers[0];
+  const imageClass =
+    CARD_IMAGE_CLASS[product.id] ??
+    "max-h-full max-w-full object-contain object-center transition-transform duration-300 group-hover:scale-[1.02]";
 
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 flex flex-col relative group">
@@ -21,12 +30,12 @@ export function ProductCard({ product, showCTA = true }: ProductCardProps) {
       </div>
 
       {(product.cardImage ?? product.mainImage) ? (
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white p-1 md:p-2">
+        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white p-2 md:p-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.cardImage ?? product.mainImage}
             alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-            className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
+            className={imageClass}
           />
         </div>
       ) : (
