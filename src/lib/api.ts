@@ -1,5 +1,6 @@
 import type { CartItem } from "@/stores/cart-store";
 import type { Attribution } from "@/lib/attribution";
+import { normalizeCreateOrderResult } from "@/lib/normalize-order-response";
 
 // Always same-origin: Next.js proxies /api/* to the Python backend (avoids CORS).
 const API_BASE = "/api";
@@ -33,6 +34,7 @@ export interface CreateOrderResult {
     productNameAr: string;
     price: number;
     expiresInSeconds: number;
+    imageUrl?: string;
   };
 }
 
@@ -96,7 +98,7 @@ export async function createOrder(payload: CreateOrderPayload): Promise<CreateOr
     throw new Error(msg);
   }
 
-  return res.json();
+  return normalizeCreateOrderResult((await res.json()) as Record<string, unknown>);
 }
 
 export async function submitUpsell(

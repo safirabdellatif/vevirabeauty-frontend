@@ -113,6 +113,7 @@ export function CheckoutModal() {
               productNameAr: result.upsell.productNameAr,
               price: result.upsell.price,
               expiresInSeconds: result.upsell.expiresInSeconds,
+              imageUrl: result.upsell.imageUrl,
             }
           : undefined,
       });
@@ -130,7 +131,7 @@ export function CheckoutModal() {
 
   const total = totalPrice();
 
-  if (step === "upsell" && upsell && orderId) {
+  if (step === "upsell" && upsell) {
     return <UpsellModal />;
   }
 

@@ -22,6 +22,7 @@ interface CheckoutState {
     productNameAr: string;
     price: number;
     expiresInSeconds: number;
+    imageUrl?: string;
   } | null;
   errorMessage: string | null;
   setStep: (step: CheckoutStep) => void;

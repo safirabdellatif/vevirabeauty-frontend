@@ -97,6 +97,7 @@ export async function handleCreateOrder(body: CreateOrderBody): Promise<Response
   const orderNumber = generateOrderNumber();
   const productIds = sheetItems.filter((i) => i.source !== "upsell").map((i) => i.product_id);
   const upsell = selectUpsell(productIds);
+  const upsellProduct = upsell ? PRODUCTS[upsell.productId] : null;
 
   const stored: StoredOrder = {
     orderId,
@@ -135,12 +136,13 @@ export async function handleCreateOrder(body: CreateOrderBody): Promise<Response
     status: "pending_confirmation",
     total: subtotal,
     currency: "MAD",
-    upsell: upsell
+  upsell: upsell && upsellProduct
       ? {
           productId: upsell.productId,
-          productNameAr: upsell.productNameAr,
+          productNameAr: upsellProduct.nameAr,
           price: upsell.price,
           expiresInSeconds: upsell.expiresInSeconds,
+          imageUrl: upsellProduct.cardImage ?? upsellProduct.mainImage ?? "",
         }
       : null,
   });

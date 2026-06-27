@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useCheckoutStore } from "@/stores/checkout-store";
 import { submitUpsell } from "@/lib/api";
 import { generateEventId } from "@/lib/events";
 import { formatSARCompact } from "@/lib/money";
 import { useRouter } from "next/navigation";
-import type { ProductId } from "@/content/products";
+import { PRODUCTS, type ProductId } from "@/content/products";
 import { ProductThumbnail } from "@/components/product/ProductThumbnail";
 
 const ORDER_SUMMARY_STORAGE_KEY = "vevirabeauty-last-order-summary";
@@ -58,21 +58,7 @@ export function UpsellModal() {
     return `/thank-you?${params.toString()}`;
   };
 
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(timerRef.current!);
-          handleDecline();
-          return 0;
-        }
-        return s - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timerRef.current!);
-  }, []);
-
-  const handleDecline = async () => {
+  const handleDecline = useCallback(async () => {
     if (deciding) return;
     setDeciding(true);
     if (orderId) {
@@ -82,7 +68,7 @@ export function UpsellModal() {
     const url = buildThankYouUrl(orderItems, orderTotal, false);
     reset();
     router.push(url);
-  };
+  }, [deciding, orderId, orderItems, orderNumber, orderTotal, reset, router]);
 
   const handleAccept = async () => {
     if (deciding || !upsell || !orderId) return;
@@ -110,16 +96,34 @@ export function UpsellModal() {
     router.push(url);
   };
 
+  useEffect(() => {
+    if (!upsell) return;
+    setSecondsLeft(upsell.expiresInSeconds);
+    timerRef.current = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          clearInterval(timerRef.current!);
+          void handleDecline();
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current!);
+  }, [upsell, handleDecline]);
+
   if (!upsell) return null;
 
+  const product = PRODUCTS[upsell.productId as ProductId];
+  const imageSrc = upsell.imageUrl ?? product?.cardImage ?? product?.mainImage;
+
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/60 z-[60] flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         className="bg-white rounded-3xl shadow-modal max-w-sm w-full p-7 text-center"
       >
-        {/* Timer */}
         <div className="w-14 h-14 rounded-full bg-brand-gold/20 text-brand-gold font-bold text-2xl flex items-center justify-center mx-auto mb-5">
           {secondsLeft}
         </div>
@@ -128,22 +132,30 @@ export function UpsellModal() {
           عرض خاص لطلبك فقط
         </p>
 
-        <ProductThumbnail
-          productId={upsell.productId as ProductId}
-          className="mx-auto mb-4 aspect-[4/3] w-full max-w-[240px] rounded-2xl shadow-sm"
-          imageClassName="object-cover p-0"
-        />
+        {imageSrc ? (
+          <div className="mx-auto mb-4 aspect-[4/3] w-full max-w-[260px] overflow-hidden rounded-2xl bg-white shadow-sm">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageSrc}
+              alt={upsell.productNameAr}
+              className="h-full w-full object-cover object-center"
+            />
+          </div>
+        ) : (
+          <ProductThumbnail
+            productId={upsell.productId as ProductId}
+            className="mx-auto mb-4 aspect-[4/3] w-full max-w-[260px] rounded-2xl shadow-sm"
+            imageClassName="object-cover p-0"
+          />
+        )}
 
-        <h2 className="text-xl font-bold text-brand-charcoal mb-2">
-          {upsell.productNameAr}
-        </h2>
+        <h2 className="text-xl font-bold text-brand-charcoal mb-2">{upsell.productNameAr}</h2>
         <p className="text-sm text-brand-gray leading-relaxed mb-5">
           أضيفي {upsell.productNameAr} لروتينك الآن بسعر{" "}
           <span className="font-extrabold text-brand-teal text-lg">{formatSARCompact(upsell.price)}</span>{" "}
           بدل السعر الأساسي، وادفعي عند الاستلام. لن نطلب بياناتك من جديد!
         </p>
 
-        {/* Progress bar */}
         <div className="w-full bg-gray-100 rounded-full h-1.5 mb-6 overflow-hidden">
           <motion.div
             className="h-full bg-brand-gold rounded-full"
@@ -161,7 +173,7 @@ export function UpsellModal() {
           أضيفيها لطلبي - {formatSARCompact(upsell.price)} فقط
         </button>
         <button
-          onClick={handleDecline}
+          onClick={() => void handleDecline()}
           disabled={deciding}
           className="text-sm text-brand-gray font-medium hover:text-brand-charcoal transition-colors disabled:opacity-60"
         >

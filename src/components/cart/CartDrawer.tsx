@@ -8,7 +8,6 @@ import { useCheckoutStore } from "@/stores/checkout-store";
 import type { ProductId } from "@/content/products";
 import { formatSARCompact } from "@/lib/money";
 import { ProductThumbnail } from "@/components/product/ProductThumbnail";
-import { CheckoutModal } from "@/components/checkout/CheckoutModal";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -171,11 +170,6 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           </>
         )}
       </AnimatePresence>
-
-      {/* Checkout Modal - rendered outside drawer */}
-      {(step === "form" || step === "submitting" || step === "upsell" || step === "done" || step === "error") && (
-        <CheckoutModal />
-      )}
     </>
   );
 }

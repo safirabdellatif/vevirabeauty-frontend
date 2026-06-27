@@ -5,6 +5,7 @@ import { ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCartStore } from "@/stores/cart-store";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { CheckoutHost } from "@/components/checkout/CheckoutHost";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 
 const NAV_LINKS = [
@@ -81,6 +82,7 @@ export function SiteHeader() {
       </header>
 
       <CartDrawer isOpen={isOpen} onClose={closeCart} />
+      <CheckoutHost />
     </>
   );
 }
