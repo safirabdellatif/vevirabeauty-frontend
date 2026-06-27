@@ -21,12 +21,12 @@ export function ProductCard({ product, showCTA = true }: ProductCardProps) {
       </div>
 
       {(product.cardImage ?? product.mainImage) ? (
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white p-1 md:p-2">
+        <div className="relative flex h-64 items-center justify-center overflow-hidden bg-gradient-to-b from-gray-50 to-white p-3 md:h-72 md:p-4">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.cardImage ?? product.mainImage}
             alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-            className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
+            className="max-h-full max-w-full object-contain object-center transition-transform duration-300 group-hover:scale-[1.03]"
           />
         </div>
       ) : (
