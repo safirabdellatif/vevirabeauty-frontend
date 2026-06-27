@@ -62,7 +62,7 @@ async function readAll(): Promise<AdRedirect[]> {
   const merged = new Map<string, AdRedirect>();
   for (const row of readEnvRows()) merged.set(row.slug, row);
   for (const row of await readFileRows()) merged.set(row.slug, row);
-  return [...merged.values()];
+  return Array.from(merged.values());
 }
 
 async function writeAll(rows: AdRedirect[]): Promise<void> {
