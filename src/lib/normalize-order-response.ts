@@ -1,4 +1,5 @@
 import type { CreateOrderResult } from "@/lib/api";
+import { resolveUpsellDisplay } from "@/lib/resolve-upsell-display";
 
 function readUpsell(raw: Record<string, unknown>): CreateOrderResult["upsell"] {
   const u = raw.upsell;
@@ -9,13 +10,24 @@ function readUpsell(raw: Record<string, unknown>): CreateOrderResult["upsell"] {
   if (!productId) return undefined;
 
   const imageUrl = row.imageUrl ?? row.image_url;
+  const productNameAr = String(
+    row.productNameAr ?? row.product_name_ar ?? row.product_name ?? row.name_ar ?? ""
+  );
 
-  return {
+  const resolved = resolveUpsellDisplay({
     productId: String(productId),
-    productNameAr: String(row.productNameAr ?? row.product_name_ar ?? ""),
+    productNameAr,
     price: Number(row.price ?? 0),
     expiresInSeconds: Number(row.expiresInSeconds ?? row.expires_in_seconds ?? 15),
     imageUrl: imageUrl ? String(imageUrl) : undefined,
+  });
+
+  return {
+    productId: resolved.productId,
+    productNameAr: resolved.nameAr,
+    price: resolved.price,
+    expiresInSeconds: resolved.expiresInSeconds,
+    imageUrl: resolved.imageSrc || undefined,
   };
 }
 

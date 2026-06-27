@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Banknote, PackageCheck } from "lucide-react";
+import type { ProductId } from "@/content/products";
+import { PRODUCTS } from "@/content/products";
 import { formatSARCompact } from "@/lib/money";
+import { isProductId } from "@/lib/resolve-upsell-display";
+import { ProductThumbnail } from "@/components/product/ProductThumbnail";
 
 interface OrderSummaryItem {
   productId: string;
@@ -19,7 +23,11 @@ interface StoredOrderSummary {
   items: OrderSummaryItem[];
 }
 
-interface ThankYouOrderSummaryProps {
+function itemDisplayName(item: OrderSummaryItem): string {
+  if (item.productName?.trim()) return item.productName;
+  if (isProductId(item.productId)) return PRODUCTS[item.productId].nameAr;
+  return item.productId;
+}
   orderNumber?: string;
   total?: number;
   encodedItems?: string;
@@ -89,9 +97,13 @@ export function ThankYouOrderSummary({ orderNumber, total, encodedItems }: Thank
           </div>
           <div className="space-y-3">
             {items.map((item) => (
-              <div key={`${item.productId}-${item.productName}`} className="flex justify-between gap-4 text-sm">
-                <div>
-                  <p className="font-bold text-brand-charcoal">{item.productName}</p>
+              <div key={`${item.productId}-${item.productName}`} className="flex items-center gap-3 text-sm">
+                <ProductThumbnail
+                  productId={item.productId as ProductId}
+                  className="w-14 h-14 flex-shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-brand-charcoal">{itemDisplayName(item)}</p>
                   <p className="text-xs text-brand-gray">الكمية: {item.quantity}</p>
                 </div>
                 <span className="font-extrabold text-brand-teal whitespace-nowrap">{formatSARCompact(item.price)}</span>

@@ -17,6 +17,7 @@ import { formatSARCompact } from "@/lib/money";
 import type { ProductId } from "@/content/products";
 import { ProductThumbnail } from "@/components/product/ProductThumbnail";
 import { UpsellModal } from "./UpsellModal";
+import { resolveUpsellDisplay } from "@/lib/resolve-upsell-display";
 
 const schema = z.object({
   name: z
@@ -108,13 +109,16 @@ export function CheckoutModal() {
           price: item.offerPrice,
         })),
         upsell: result.upsell
-          ? {
-              productId: result.upsell.productId,
-              productNameAr: result.upsell.productNameAr,
-              price: result.upsell.price,
-              expiresInSeconds: result.upsell.expiresInSeconds,
-              imageUrl: result.upsell.imageUrl,
-            }
+          ? (() => {
+              const d = resolveUpsellDisplay(result.upsell);
+              return {
+                productId: d.productId,
+                productNameAr: d.nameAr,
+                price: d.price,
+                expiresInSeconds: d.expiresInSeconds,
+                imageUrl: d.imageSrc,
+              };
+            })()
           : undefined,
       });
 

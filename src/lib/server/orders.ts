@@ -93,7 +93,7 @@ export function selectUpsell(cartItemIds: string[]): UpsellOffer | null {
   const product = PRODUCTS[chosen];
   return {
     productId: chosen,
-    productNameAr: product.shortNameAr,
+    productNameAr: product.nameAr,
     price: UPSELL_PRICE,
     expiresInSeconds: UPSELL_EXPIRES_SECONDS,
   };
