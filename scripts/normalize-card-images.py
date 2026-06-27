@@ -15,7 +15,7 @@ CONTENT_ZOOM: dict[str, float] = {
 }
 
 # Réduit uniquement la zone bouteille (gauche), pas le before/after.
-JOINT_BOTTLE_SCALE = 0.68
+JOINT_BOTTLE_SCALE = 0.56
 JOINT_BOTTLE_SPLIT = 0.43  # fraction largeur = zone bouteille
 
 
