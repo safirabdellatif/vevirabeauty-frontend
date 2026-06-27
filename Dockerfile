@@ -35,6 +35,8 @@ ENV BACKEND_API_URL=$BACKEND_API_URL
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/data ./data
+RUN mkdir -p /app/data && chown -R node:node /app/data
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"

@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import { resolveEnvSlug } from "@/lib/ad-redirect-slugs";
+import { resolvePublicAdRedirect } from "@/lib/server/ad-redirects";
+import { tryBackendRequest } from "@/lib/server/backend-fetch";
 import { SITE } from "@/content/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function backendBaseUrl(): string {
-  return (
-    process.env.BACKEND_API_URL ||
-    process.env.API_BASE_URL ||
-    "http://localhost:8000"
-  ).replace(/\/$/, "");
-}
 
 function publicSiteOrigin(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || SITE.url).replace(/\/$/, "");
 }
 
 function redirectToPath(targetPath: string, searchParams: URLSearchParams): NextResponse {
-  const path = targetPath.startsWith("/") ? targetPath : `/${targetPath}`;
-  const destination = new URL(path, publicSiteOrigin());
+  const trimmed = targetPath.trim();
+  let destination: URL;
+
+  if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+    destination = new URL(trimmed);
+  } else {
+    const path = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+    destination = new URL(path, publicSiteOrigin());
+  }
+
   searchParams.forEach((value, key) => destination.searchParams.set(key, value));
   return NextResponse.redirect(destination, 302);
 }
@@ -44,6 +47,7 @@ function notFoundResponse(slug: string): NextResponse {
     <h1>رابط الإعلان غير موجود</h1>
     <p>الـ slug <code>${slug}</code> غير مسجّل في Redirect Manager.</p>
     <p>أنشئه من <a href="/redirectvevira">/redirectvevira</a> ثم اختبر نفس الـ slug.</p>
+    <p>Slugs prêts : <code>lp</code>, <code>joint</code>, <code>hair</code>, <code>melasma</code>.</p>
   </div>
 </body>
 </html>`;
@@ -54,19 +58,34 @@ function notFoundResponse(slug: string): NextResponse {
   });
 }
 
+async function resolveTargetPath(slug: string): Promise<string | null> {
+  const envTarget = resolveEnvSlug(slug);
+  if (envTarget) return envTarget;
+
+  const localTarget = await resolvePublicAdRedirect(slug);
+  if (localTarget) return localTarget;
+
+  const proxied = await tryBackendRequest(`/redirects/public/${encodeURIComponent(slug)}`, {
+    method: "GET",
+  });
+  if (proxied?.ok) {
+    const data = (await proxied.json()) as { target_path: string };
+    return data.target_path;
+  }
+
+  return null;
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } },
 ) {
   const slug = params.slug.trim().toLowerCase();
-  const lookup = await fetch(`${backendBaseUrl()}/redirects/public/${encodeURIComponent(slug)}`, {
-    cache: "no-store",
-  });
+  const targetPath = await resolveTargetPath(slug);
 
-  if (!lookup.ok) {
+  if (!targetPath) {
     return notFoundResponse(slug);
   }
 
-  const data = (await lookup.json()) as { target_path: string };
-  return redirectToPath(data.target_path, request.nextUrl.searchParams);
+  return redirectToPath(targetPath, request.nextUrl.searchParams);
 }

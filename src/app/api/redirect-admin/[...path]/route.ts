@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
-import { proxyToBackend } from "@/lib/server/backend-proxy";
+import { tryBackendRequest } from "@/lib/server/backend-fetch";
+import {
+  handleLocalRedirectAdmin,
+  redirectAdminConfigured,
+} from "@/lib/server/redirect-admin-handlers";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -7,7 +11,31 @@ export const dynamic = "force-dynamic";
 async function handle(req: NextRequest, pathParts: string[]) {
   const search = req.nextUrl.search || "";
   const path = `/redirect-admin/${pathParts.join("/")}${search}`;
-  return proxyToBackend(path, req, req.method);
+
+  const headers = new Headers();
+  const contentType = req.headers.get("content-type");
+  if (contentType) headers.set("Content-Type", contentType);
+  const auth = req.headers.get("authorization");
+  if (auth) headers.set("Authorization", auth);
+
+  const bodyText =
+    req.method === "GET" || req.method === "HEAD" ? undefined : await req.text();
+
+  const proxied = await tryBackendRequest(path, {
+    method: req.method,
+    headers,
+    body: bodyText,
+  });
+
+  if (proxied?.ok) return proxied;
+
+  if (redirectAdminConfigured()) {
+    return handleLocalRedirectAdmin(req, pathParts, bodyText);
+  }
+
+  if (proxied) return proxied;
+
+  return handleLocalRedirectAdmin(req, pathParts, bodyText);
 }
 
 export async function GET(req: NextRequest, { params }: { params: { path: string[] } }) {
