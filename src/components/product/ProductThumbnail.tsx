@@ -23,9 +23,9 @@ export function ProductThumbnail({
   if (!product) return null;
 
   const alt = product.imagePlaceholders[0]?.alt ?? product.nameAr;
-  const label = product.imagePlaceholders[0]?.label ?? product.shortNameAr;
+  const imageSrc = product.cardImage ?? product.mainImage;
 
-  if (!product.mainImage || failed) {
+  if (!imageSrc || failed) {
     return (
       <ImagePlaceholder
         label={product.shortNameAr}
@@ -45,7 +45,7 @@ export function ProductThumbnail({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={product.mainImage}
+        src={imageSrc}
         alt={alt}
         onError={() => setFailed(true)}
         className={cn("h-full w-full object-contain object-center p-1", imageClassName)}

@@ -7,6 +7,8 @@ import { submitUpsell } from "@/lib/api";
 import { generateEventId } from "@/lib/events";
 import { formatSARCompact } from "@/lib/money";
 import { useRouter } from "next/navigation";
+import type { ProductId } from "@/content/products";
+import { ProductThumbnail } from "@/components/product/ProductThumbnail";
 
 const ORDER_SUMMARY_STORAGE_KEY = "vevirabeauty-last-order-summary";
 
@@ -122,9 +124,16 @@ export function UpsellModal() {
           {secondsLeft}
         </div>
 
-        <p className="text-xs text-brand-teal font-semibold uppercase tracking-widest mb-2">
+        <p className="text-xs text-brand-teal font-semibold uppercase tracking-widest mb-3">
           عرض خاص لطلبك فقط
         </p>
+
+        <ProductThumbnail
+          productId={upsell.productId as ProductId}
+          className="mx-auto mb-4 aspect-[4/3] w-full max-w-[240px] rounded-2xl shadow-sm"
+          imageClassName="object-cover p-0"
+        />
+
         <h2 className="text-xl font-bold text-brand-charcoal mb-2">
           {upsell.productNameAr}
         </h2>
