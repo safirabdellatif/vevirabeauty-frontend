@@ -1,25 +1,18 @@
 import Link from "next/link";
 import { Star, ShieldCheck, Truck } from "lucide-react";
-import type { Product, ProductId } from "@/content/products";
+import type { Product } from "@/content/products";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { formatSARCompact } from "@/lib/money";
+import { PRODUCT_CARD_IMAGE_CLASS } from "@/lib/product-image-display";
 
 interface ProductCardProps {
   product: Product;
   showCTA?: boolean;
 }
 
-/** Ajustements légers — huile : bouteille très grande dans l'image IA */
-const CARD_IMAGE_CLASS: Partial<Record<ProductId, string>> = {
-  joint_pain_oil:
-    "max-h-full max-w-full object-contain object-center scale-[0.92] transition-transform duration-300 group-hover:scale-[0.95]",
-};
-
 export function ProductCard({ product, showCTA = true }: ProductCardProps) {
   const defaultOffer = product.offers.find((o) => o.defaultSelected) ?? product.offers[0];
-  const imageClass =
-    CARD_IMAGE_CLASS[product.id] ??
-    "max-h-full max-w-full object-contain object-center transition-transform duration-300 group-hover:scale-[1.02]";
+  const imageClass = PRODUCT_CARD_IMAGE_CLASS[product.id];
 
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 flex flex-col relative group">

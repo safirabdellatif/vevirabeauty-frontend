@@ -18,6 +18,7 @@ import { FAQS } from "@/content/faqs";
 import { formatSARCompact } from "@/lib/money";
 import { generateEventId } from "@/lib/events";
 import { trackAddToCart, trackViewContent } from "@/lib/analytics";
+import { PRODUCT_PAGE_IMAGE_CLASS } from "@/lib/product-image-display";
 
 interface ProductPageClientProps {
   product: Product;
@@ -250,11 +251,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                   <img
                     src={heroImage}
                     alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-                    className={
-                      product.id === "joint_pain_oil"
-                        ? "max-h-full max-w-full object-contain object-center scale-[0.92]"
-                        : "max-h-full max-w-full object-contain object-center"
-                    }
+                    className={PRODUCT_PAGE_IMAGE_CLASS[product.id]}
                   />
                 </div>
               ) : (
