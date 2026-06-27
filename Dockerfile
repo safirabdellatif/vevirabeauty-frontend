@@ -31,7 +31,11 @@ FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ARG BACKEND_API_URL=https://api.vevirabeauty.com
+ARG REDIRECT_ADMIN_USERNAME=
+ARG REDIRECT_ADMIN_PASSWORD=
 ENV BACKEND_API_URL=$BACKEND_API_URL
+ENV REDIRECT_ADMIN_USERNAME=$REDIRECT_ADMIN_USERNAME
+ENV REDIRECT_ADMIN_PASSWORD=$REDIRECT_ADMIN_PASSWORD
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public

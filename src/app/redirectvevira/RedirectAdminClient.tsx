@@ -17,6 +17,8 @@ import {
   REDIRECT_TARGET_OPTIONS,
   buildAdRedirectUrl,
 } from "@/lib/redirect-targets";
+import { DEFAULT_AD_REDIRECTS } from "@/lib/ad-redirect-slugs";
+import { formatApiDetail } from "@/lib/format-api-error";
 
 const API_BASE = "/api/redirect-admin";
 const AUTH_KEY = "vevirabeauty_redirect_admin_auth";
@@ -79,8 +81,12 @@ export function RedirectAdminClient() {
         setAuth("");
         throw new Error("Invalid login.");
       }
-      if (!res.ok) throw new Error("Could not load redirects.");
-      setRows((await res.json()) as RedirectRow[]);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(formatApiDetail(body, "Could not load redirects."));
+      }
+      const rows = (await res.json()) as RedirectRow[];
+      setRows(rows);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load redirects.");
     } finally {
@@ -124,11 +130,7 @@ export function RedirectAdminClient() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const detail = body?.detail;
-        const message = Array.isArray(detail)
-          ? detail.map((item: { msg?: string }) => item.msg).filter(Boolean).join(" ")
-          : detail;
-        throw new Error(message || "Could not create redirect.");
+        throw new Error(formatApiDetail(body, "Could not create redirect."));
       }
       const created = body as RedirectRow;
       setNewSlug("");
@@ -167,7 +169,7 @@ export function RedirectAdminClient() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(body?.detail || "Could not update redirect.");
+        throw new Error(formatApiDetail(body, "Could not update redirect."));
       }
       setEditingSlug(null);
       setNotice("Redirect updated.");
@@ -282,6 +284,21 @@ export function RedirectAdminClient() {
           </div>
         ) : null}
 
+        <section className="rounded-[2rem] border border-brand-teal/30 bg-brand-teal/10 p-6">
+          <h2 className="text-lg font-bold">Slugs intégrés (déjà actifs)</h2>
+          <p className="mt-2 text-sm text-white/70">
+            Pas besoin de les recréer — utilisez directement ces liens pub :
+          </p>
+          <ul className="mt-4 space-y-2 text-sm">
+            {Object.entries(DEFAULT_AD_REDIRECTS).map(([slug, target]) => (
+              <li key={slug} className="flex flex-wrap items-center gap-2 rounded-xl bg-black/20 px-3 py-2">
+                <code className="text-brand-mint">{buildAdRedirectUrl(slug)}</code>
+                <span className="text-white/50">→ {target}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
         <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
           <div className="mb-5 flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-gold text-brand-dark">
@@ -291,6 +308,10 @@ export function RedirectAdminClient() {
               <h2 className="text-xl font-bold">Create redirect</h2>
               <p className="text-sm text-white/60">
                 Ad URL format: <code className="text-brand-mint">/ads/your-slug?utm_source=...</code>
+              </p>
+              <p className="mt-1 text-xs text-white/45">
+                Pour LP, utilisez le slug intégré <code className="text-brand-mint">lp</code> — ou créez{" "}
+                <code className="text-brand-mint">lp-fb</code>, <code className="text-brand-mint">promo-juin</code>, etc.
               </p>
             </div>
           </div>

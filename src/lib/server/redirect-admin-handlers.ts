@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "crypto";
 import type { NextRequest } from "next/server";
+import { getEnvSlugMap } from "@/lib/ad-redirect-slugs";
 import {
   createAdRedirect,
   deleteAdRedirect,
@@ -87,6 +88,15 @@ export async function handleLocalRedirectAdmin(
     } catch (error) {
       if (error instanceof Error && error.message === "duplicate_slug") {
         return Response.json({ detail: "Slug already exists." }, { status: 409 });
+      }
+      if (error instanceof Error && error.message === "builtin_slug") {
+        const builtIn = Object.keys(getEnvSlugMap()).join(", ");
+        return Response.json(
+          {
+            detail: `Slug reserved (built-in): ${builtIn}. Use another name, e.g. lp-fb or promo-juin.`,
+          },
+          { status: 409 },
+        );
       }
       return badRequest("Invalid slug or target path.");
     }

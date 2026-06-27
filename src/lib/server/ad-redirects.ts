@@ -111,7 +111,7 @@ export async function createAdRedirect(
     throw new Error("duplicate_slug");
   }
   if (readEnvRows().some((row) => row.slug === slug)) {
-    throw new Error("duplicate_slug");
+    throw new Error("builtin_slug");
   }
 
   const stamp = nowIso();

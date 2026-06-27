@@ -21,18 +21,16 @@ async function handle(req: NextRequest, pathParts: string[]) {
   const bodyText =
     req.method === "GET" || req.method === "HEAD" ? undefined : await req.text();
 
+  // Frontend credentials take priority — backend API is often unavailable.
+  if (redirectAdminConfigured()) {
+    return handleLocalRedirectAdmin(req, pathParts, bodyText);
+  }
+
   const proxied = await tryBackendRequest(path, {
     method: req.method,
     headers,
     body: bodyText,
   });
-
-  if (proxied?.ok) return proxied;
-
-  if (redirectAdminConfigured()) {
-    return handleLocalRedirectAdmin(req, pathParts, bodyText);
-  }
-
   if (proxied) return proxied;
 
   return handleLocalRedirectAdmin(req, pathParts, bodyText);
