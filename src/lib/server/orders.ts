@@ -1,6 +1,6 @@
 import { PRODUCTS, PRODUCT_LIST, type ProductId } from "@/content/products";
 
-export const UPSELL_PRICE = 79;
+export const UPSELL_PRICE = 105;
 export const UPSELL_EXPIRES_SECONDS = 15;
 
 export interface SheetItem {
