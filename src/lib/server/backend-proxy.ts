@@ -32,13 +32,25 @@ export async function proxyToBackend(
     bodyOverride ??
     (method === "GET" || method === "HEAD" ? undefined : await req.text());
 
-  const res = await fetch(url, { method, headers, body });
-  const text = await res.text();
+  try {
+    const res = await fetch(url, { method, headers, body });
+    const text = await res.text();
 
-  return new NextResponse(text, {
-    status: res.status,
-    headers: {
-      "Content-Type": res.headers.get("content-type") || "application/json",
-    },
-  });
+    return new NextResponse(text, {
+      status: res.status,
+      headers: {
+        "Content-Type": res.headers.get("content-type") || "application/json",
+      },
+    });
+  } catch {
+    return NextResponse.json(
+      {
+        detail: {
+          code: "backend_unreachable",
+          message: "تعذّر الاتصال بالخادم. حاولي بعد لحظات أو تواصلي معنا.",
+        },
+      },
+      { status: 503 },
+    );
+  }
 }

@@ -37,53 +37,61 @@ export interface CreateOrderResult {
 }
 
 export async function createOrder(payload: CreateOrderPayload): Promise<CreateOrderResult> {
-  const res = await fetch(`${API_BASE}/orders`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      customer: payload.customer,
-      cart: {
-        items: payload.cart.items.map((item) => ({
-          product_id: item.productId,
-          product_name: item.productName,
-          quantity: item.quantity,
-          unit_bundle_price: item.unitBundlePrice,
-          offer_price: item.offerPrice,
-          offer_label: item.offerLabel,
-          source: item.source,
-        })),
-        total: payload.cart.total,
-        currency: payload.cart.currency,
-      },
-      attribution: {
-        landing_page: payload.attribution.landingPage,
-        referrer: payload.attribution.referrer,
-        utm_source: payload.attribution.utmSource,
-        utm_medium: payload.attribution.utmMedium,
-        utm_campaign: payload.attribution.utmCampaign,
-        utm_content: payload.attribution.utmContent,
-        utm_term: payload.attribution.utmTerm,
-        fbclid: payload.attribution.fbclid,
-        fbc: payload.attribution.fbc,
-        fbp: payload.attribution.fbp,
-        ttclid: payload.attribution.ttclid,
-        ttp: payload.attribution.ttp,
-        scclid: payload.attribution.scclid,
-        snaptr_cookie: payload.attribution.snaptrCookie,
-      },
-      analytics: {
-        event_id: payload.analytics.eventId,
-        session_id: payload.analytics.sessionId,
-        user_agent: payload.analytics.userAgent,
-      },
-    }),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customer: payload.customer,
+        cart: {
+          items: payload.cart.items.map((item) => ({
+            product_id: item.productId,
+            product_name: item.productName,
+            quantity: item.quantity,
+            unit_bundle_price: item.unitBundlePrice,
+            offer_price: item.offerPrice,
+            offer_label: item.offerLabel,
+            source: item.source,
+          })),
+          total: payload.cart.total,
+          currency: payload.cart.currency,
+        },
+        attribution: {
+          landing_page: payload.attribution.landingPage,
+          referrer: payload.attribution.referrer,
+          utm_source: payload.attribution.utmSource,
+          utm_medium: payload.attribution.utmMedium,
+          utm_campaign: payload.attribution.utmCampaign,
+          utm_content: payload.attribution.utmContent,
+          utm_term: payload.attribution.utmTerm,
+          fbclid: payload.attribution.fbclid,
+          fbc: payload.attribution.fbc,
+          fbp: payload.attribution.fbp,
+          ttclid: payload.attribution.ttclid,
+          ttp: payload.attribution.ttp,
+          scclid: payload.attribution.scclid,
+          snaptr_cookie: payload.attribution.snaptrCookie,
+        },
+        analytics: {
+          event_id: payload.analytics.eventId,
+          session_id: payload.analytics.sessionId,
+          user_agent: payload.analytics.userAgent,
+        },
+      }),
+    });
+  } catch {
+    throw new Error("تعذّر الاتصال. تحققي من الإنترنت وحاولي مجددًا.");
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
+    const detail = body?.detail;
     const msg =
-      (body?.detail as { message?: string })?.message ||
-      (typeof body?.detail === "string" ? body.detail : null) ||
+      (typeof detail === "object" && detail !== null && "message" in detail
+        ? String((detail as { message?: string }).message)
+        : null) ||
+      (typeof detail === "string" ? detail : null) ||
       "صار خطأ مؤقت. حاولي مرة ثانية بعد لحظات.";
     throw new Error(msg);
   }
