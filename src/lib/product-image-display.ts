@@ -10,5 +10,5 @@ const BASE = "max-h-full max-w-full object-contain object-center";
 export const PRODUCT_PAGE_IMAGE_CLASS: Record<ProductId, string> = {
   melasma_cream: `${BASE} scale-[1.06]`,
   hair_loss_spray: BASE,
-  joint_pain_oil: `${BASE} scale-[0.88]`,
+  joint_pain_oil: BASE,
 };

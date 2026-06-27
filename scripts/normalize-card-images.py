@@ -11,7 +11,7 @@ CANVAS = 1024
 
 # Zoom baked into source: <1 shrinks artwork (smaller bottle in frame), >1 enlarges.
 CONTENT_ZOOM: dict[str, float] = {
-    "joint-pain-oil": 0.45,
+    "joint-pain-oil": 0.88,
     "melasma-cream": 1.16,
     "hair-loss-spray": 1.08,
 }
