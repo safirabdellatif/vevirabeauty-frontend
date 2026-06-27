@@ -12,8 +12,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product, showCTA = true }: ProductCardProps) {
   const defaultOffer = product.offers.find((o) => o.defaultSelected) ?? product.offers[0];
-  const imageClass = PRODUCT_CARD_IMAGE_CLASS[product.id];
-
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 flex flex-col relative group">
       {/* Warranty Badge */}
@@ -23,12 +21,12 @@ export function ProductCard({ product, showCTA = true }: ProductCardProps) {
       </div>
 
       {(product.cardImage ?? product.mainImage) ? (
-        <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white p-2 md:p-3">
+        <div className="aspect-[4/3] overflow-hidden bg-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={product.cardImage ?? product.mainImage}
             alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-            className={imageClass}
+            className={PRODUCT_CARD_IMAGE_CLASS}
           />
         </div>
       ) : (
