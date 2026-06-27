@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1] / "src" / "assets" / "products"
 CARD_SIZE = (1200, 900)  # 4:3
 
 CONTENT_ZOOM: dict[str, float] = {
-    "joint-pain-oil": 1.14,  # crop léger : bouteille un peu plus petite, fond net
+    "joint-pain-oil": 1.06,
     "melasma-cream": 1.12,
     "hair-loss-spray": 1.06,
 }
