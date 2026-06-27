@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { SITE } from "@/content/site";
 
 interface ImagePlaceholderProps {
   label: string;
@@ -26,7 +27,7 @@ export function ImagePlaceholder({
       </div>
       {showBrand && (
         <div className="w-16 h-16 rounded-full bg-white/80 flex items-center justify-center mb-3 shadow-soft p-2">
-          <img src="/logo.png" alt="Vevira" className="h-full w-full object-contain" />
+          <img src={SITE.logo} alt={SITE.logoAlt} className="h-full w-full object-contain" />
         </div>
       )}
       <p className="text-sm font-medium text-brand-teal text-center px-4">{label}</p>

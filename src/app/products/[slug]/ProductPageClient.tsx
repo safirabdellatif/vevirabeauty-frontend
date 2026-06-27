@@ -245,12 +245,12 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               </div>
               
               {heroImage ? (
-                <div className="relative h-80 md:h-[500px] rounded-3xl shadow-card bg-neutral-950 overflow-hidden">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl shadow-card bg-white md:aspect-[16/10]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={heroImage}
                     alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
-                    className="h-full w-full object-contain object-center p-2"
+                    className="h-full w-full object-cover object-center"
                   />
                 </div>
               ) : (

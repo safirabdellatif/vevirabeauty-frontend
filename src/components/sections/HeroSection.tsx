@@ -98,12 +98,12 @@ export function HeroSection({
             </div>
 
             {heroImage ? (
-              <div className="relative min-h-[260px] aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gradient-to-b from-brand-sand/40 to-white shadow-card">
+              <div className="relative min-h-[280px] aspect-[4/3] w-full overflow-hidden rounded-3xl bg-white shadow-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={heroImage}
-                  alt="منتجات فيرا بيوتي: رشاش تساقط الشعر، كريم الكلف، وزيت آلام المفاصل"
-                  className="h-full w-full object-contain object-center p-3 md:p-5"
+                  alt="منتجات فيرا بيوتي في صالون تجميل — رشاش الشعر، كريم الكلف، وزيت المفاصل"
+                  className="h-full w-full object-cover object-center"
                   loading="eager"
                   fetchPriority="high"
                 />

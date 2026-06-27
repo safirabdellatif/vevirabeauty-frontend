@@ -5,6 +5,7 @@ import { ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCartStore } from "@/stores/cart-store";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 const NAV_LINKS = [
   { href: "/", label: "الرئيسية" },
@@ -23,17 +24,7 @@ export function SiteHeader() {
       <header className="sticky top-0 z-40 bg-brand-cream/95 backdrop-blur border-b border-brand-mint shadow-soft">
         <div className="container-max flex items-center justify-between h-16">
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-3">
-            <img
-              src="/logo.png"
-              alt="فيرا بيوتي"
-              className="h-11 w-11 object-contain"
-            />
-            <span className="flex flex-col leading-none">
-              <span className="text-xl font-bold text-brand-teal tracking-tight">فيرا بيوتي</span>
-              <span className="text-xs text-brand-gray font-sans">Vevira Beauty</span>
-            </span>
-          </Link>
+          <BrandLogo linked showText />
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-7">

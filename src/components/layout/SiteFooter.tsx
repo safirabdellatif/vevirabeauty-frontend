@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE } from "@/content/site";
 import { PRODUCT_LIST } from "@/content/products";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function SiteFooter() {
   return (
@@ -9,16 +10,8 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/logo.png"
-                alt="فيرا بيوتي"
-                className="h-11 w-11 object-contain"
-              />
-              <span className="flex flex-col leading-none">
-                <span className="text-xl font-bold text-white">فيرا بيوتي</span>
-                <span className="text-xs text-brand-gray font-sans">Vevira Beauty</span>
-              </span>
+            <div className="mb-4">
+              <BrandLogo textClassName="text-white" subtextClassName="text-brand-gray" />
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
               علامة عناية مغربية — 3 منتجات طبيعية للمفاصل والشعر والكلف.

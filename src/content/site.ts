@@ -1,6 +1,8 @@
 export const SITE = {
   name: "فيرا بيوتي",
   nameEn: "Vevira Beauty",
+  logo: "/logo.png",
+  logoAlt: "فيرا بيوتي — Vevira Beauty",
   tagline: "عناية طبيعية تصل لباب دارك",
   url: "https://vevirabeauty.com",
   apiUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",

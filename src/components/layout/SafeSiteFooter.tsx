@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/content/site";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 /** Footer without health, جودة مختارة, halal, or product claims — for /lp ad warming. */
 export function SafeSiteFooter() {
@@ -8,16 +9,8 @@ export function SafeSiteFooter() {
       <div className="container-max py-14">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/logo.png"
-                alt="فيرا بيوتي"
-                className="h-11 w-11 object-contain"
-              />
-              <span className="flex flex-col leading-none">
-                <span className="text-xl font-bold text-white">فيرا بيوتي</span>
-                <span className="text-xs text-brand-gray font-sans">Vevira Beauty</span>
-              </span>
+            <div className="mb-4">
+              <BrandLogo textClassName="text-white" subtextClassName="text-brand-gray" />
             </div>
             <p className="text-sm text-gray-300 leading-relaxed">
               متجر مغربي للعناية الطبيعية. دفع عند الاستلام وتوصيل لجميع المدن.

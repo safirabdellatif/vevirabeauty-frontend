@@ -39,7 +39,7 @@ export function ProductThumbnail({
   return (
     <div
       className={cn(
-        "flex-shrink-0 overflow-hidden rounded-xl bg-neutral-950",
+        "flex-shrink-0 overflow-hidden rounded-xl bg-gradient-to-b from-brand-sand/40 to-white",
         className
       )}
     >
