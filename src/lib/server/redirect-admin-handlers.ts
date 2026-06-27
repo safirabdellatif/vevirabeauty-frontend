@@ -16,12 +16,15 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 export function redirectAdminConfigured(): boolean {
-  return Boolean(process.env.REDIRECT_ADMIN_USERNAME && process.env.REDIRECT_ADMIN_PASSWORD);
+  return Boolean(
+    process.env.REDIRECT_ADMIN_USERNAME?.trim() &&
+      process.env.REDIRECT_ADMIN_PASSWORD?.trim(),
+  );
 }
 
 export function verifyRedirectAdmin(req: NextRequest): boolean {
-  const expectedUser = process.env.REDIRECT_ADMIN_USERNAME ?? "";
-  const expectedPass = process.env.REDIRECT_ADMIN_PASSWORD ?? "";
+  const expectedUser = (process.env.REDIRECT_ADMIN_USERNAME ?? "").trim();
+  const expectedPass = (process.env.REDIRECT_ADMIN_PASSWORD ?? "").trim();
   if (!expectedUser || !expectedPass) return false;
 
   const auth = req.headers.get("authorization");
@@ -38,7 +41,10 @@ export function verifyRedirectAdmin(req: NextRequest): boolean {
 
 function unauthorized(): Response {
   return Response.json(
-    { detail: "Invalid redirect admin credentials" },
+    {
+      detail:
+        "Invalid redirect admin credentials. Check REDIRECT_ADMIN_USERNAME/PASSWORD in Easypanel Environment, then logout and sign in again.",
+    },
     { status: 401, headers: { "WWW-Authenticate": "Basic" } },
   );
 }

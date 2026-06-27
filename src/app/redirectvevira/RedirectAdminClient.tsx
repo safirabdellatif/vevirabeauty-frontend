@@ -34,7 +34,21 @@ type RedirectRow = {
 };
 
 function basicAuth(username: string, password: string) {
-  return `Basic ${btoa(`${username}:${password}`)}`;
+  const raw = `${username.trim()}:${password}`;
+  const bytes = new TextEncoder().encode(raw);
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return `Basic ${btoa(binary)}`;
+}
+
+/** pain face → pain-face */
+function normalizeSlugInput(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "")
+    .replace(/^-+|-+$/g, "");
 }
 
 function dateTime(value?: string) {
@@ -51,6 +65,7 @@ export function RedirectAdminClient() {
   const [password, setPassword] = useState("");
   const [rows, setRows] = useState<RedirectRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
 
@@ -98,11 +113,39 @@ export function RedirectAdminClient() {
     void loadRows();
   }, [loadRows]);
 
-  function login(event: FormEvent<HTMLFormElement>) {
+  async function login(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError("");
+    setNotice("");
+    setLoginLoading(true);
     const token = basicAuth(username, password);
-    sessionStorage.setItem(AUTH_KEY, token);
-    setAuth(token);
+    try {
+      const res = await fetch(`${API_BASE}/redirects`, {
+        headers: { Authorization: token },
+      });
+      if (res.status === 401) {
+        throw new Error(
+          "Identifiants incorrects. Utilisez REDIRECT_ADMIN_USERNAME/PASSWORD depuis Easypanel (Environment, pas seulement Build).",
+        );
+      }
+      if (res.status === 503) {
+        throw new Error(
+          "Redirect admin non configuré sur le serveur. Ajoutez REDIRECT_ADMIN_USERNAME et REDIRECT_ADMIN_PASSWORD dans Easypanel → Environment → redeploy.",
+        );
+      }
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(formatApiDetail(body, "Connexion impossible."));
+      }
+      sessionStorage.setItem(AUTH_KEY, token);
+      setAuth(token);
+      setPassword("");
+      setRows((await res.json()) as RedirectRow[]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Connexion impossible.");
+    } finally {
+      setLoginLoading(false);
+    }
   }
 
   function logout() {
@@ -115,6 +158,11 @@ export function RedirectAdminClient() {
     event.preventDefault();
     setError("");
     setNotice("");
+    const slug = normalizeSlugInput(newSlug);
+    if (!slug) {
+      setError("Slug invalide. Utilisez des lettres minuscules, chiffres et tirets (ex: pain-face).");
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE}/redirects`, {
         method: "POST",
@@ -123,7 +171,7 @@ export function RedirectAdminClient() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          slug: newSlug.trim().toLowerCase(),
+          slug,
           target_path: newTarget,
           label: newLabel.trim(),
         }),
@@ -235,8 +283,11 @@ export function RedirectAdminClient() {
                 required
               />
               {error ? <p className="text-sm text-red-200">{error}</p> : null}
-              <button className="w-full rounded-2xl bg-brand-gold px-5 py-3 font-bold text-brand-dark transition hover:bg-white">
-                Sign in
+              <button
+                disabled={loginLoading}
+                className="w-full rounded-2xl bg-brand-gold px-5 py-3 font-bold text-brand-dark transition hover:bg-white disabled:opacity-60"
+              >
+                {loginLoading ? "Vérification…" : "Sign in"}
               </button>
             </form>
           </div>
@@ -320,7 +371,7 @@ export function RedirectAdminClient() {
             <input
               value={newSlug}
               onChange={(e) => setNewSlug(e.target.value)}
-              placeholder="slug (e.g. vevirabeauty)"
+              placeholder="slug (ex: pain-face, lp-fb)"
               className="rounded-2xl border border-white/10 bg-white px-4 py-3 text-brand-charcoal outline-none focus:ring-2 focus:ring-brand-gold"
               required
             />
