@@ -23,14 +23,16 @@ interface StoredOrderSummary {
   items: OrderSummaryItem[];
 }
 
+interface ThankYouOrderSummaryProps {
+  orderNumber?: string;
+  total?: number;
+  encodedItems?: string;
+}
+
 function itemDisplayName(item: OrderSummaryItem): string {
   if (item.productName?.trim()) return item.productName;
   if (isProductId(item.productId)) return PRODUCTS[item.productId].nameAr;
   return item.productId;
-}
-  orderNumber?: string;
-  total?: number;
-  encodedItems?: string;
 }
 
 function decodeItems(encoded?: string): OrderSummaryItem[] {
