@@ -246,10 +246,10 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               </div>
               
               {heroImage ? (
-                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-3xl bg-white p-3 shadow-card md:aspect-[16/10] md:p-4">
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-white shadow-card md:aspect-[16/10]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={heroImage}
+                    src={product.cardImage ?? heroImage}
                     alt={product.imagePlaceholders[0]?.alt ?? product.nameAr}
                     className={PRODUCT_PAGE_IMAGE_CLASS[product.id]}
                   />
