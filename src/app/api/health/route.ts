@@ -4,14 +4,18 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const url = process.env.SHEET_WEBHOOK_URL || process.env.GOOGLE_SHEET_WEBHOOK_URL || "";
+  const sheetUrl = process.env.SHEET_WEBHOOK_URL || process.env.GOOGLE_SHEET_WEBHOOK_URL || "";
+  const backendUrl = process.env.BACKEND_API_URL || process.env.API_BASE_URL || "";
   return NextResponse.json({
     ok: true,
     service: "vevirabeauty-frontend",
-    google_sheet: {
-      configured: Boolean(url),
-      webhook_url_suffix: url ? url.replace(/\/$/, "").split("/").pop()?.slice(0, 12) : null,
+    orders: {
+      mode: process.env.USE_BACKEND_ORDERS === "true" ? "backend_with_local_fallback" : "local",
     },
-    backend_api: process.env.BACKEND_API_URL || process.env.API_BASE_URL || "http://localhost:8000",
+    google_sheet: {
+      configured: Boolean(sheetUrl),
+      webhook_url_suffix: sheetUrl ? sheetUrl.replace(/\/$/, "").split("/").pop()?.slice(0, 12) : null,
+    },
+    backend_api: backendUrl || null,
   });
 }
