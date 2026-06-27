@@ -245,7 +245,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               </div>
               
               {heroImage ? (
-                <div className="relative h-80 md:h-[500px] rounded-3xl shadow-card bg-gradient-to-b from-brand-sand/30 to-white overflow-hidden">
+                <div className="relative h-80 md:h-[500px] rounded-3xl shadow-card bg-neutral-950 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={heroImage}

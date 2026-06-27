@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ShieldCheck, Truck, BadgeCheck, Star, Award, HeartHandshake } from "lucide-react";
 import { ImagePlaceholder } from "@/components/product/ImagePlaceholder";
+import { PRODUCT_IMAGES } from "@/content/product-images";
 
 interface HeroSectionProps {
   heading: string;
@@ -20,7 +21,7 @@ export function HeroSection({
   primaryCTA = { label: "تسوّق منتجات العناية", href: "/products" },
   secondaryCTA = { label: "تعرّف على فيرا بيوتي", href: "/about" },
   imagePlaceholderLabel = "مجموعة فيرا بيوتي للعناية والثقة",
-  heroImage = "/products/hero.png?v=20260611b",
+  heroImage = PRODUCT_IMAGES.hero,
 }: HeroSectionProps) {
   return (
     <section className="relative section-padding overflow-hidden bg-gradient-to-b from-brand-sand/50 to-white">
@@ -31,6 +32,7 @@ export function HeroSection({
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
+            className="order-2 md:order-1"
           >
             {/* Micro trust */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
@@ -77,12 +79,12 @@ export function HeroSection({
             </div>
           </motion.div>
 
-          {/* Image side (left in RTL) */}
+          {/* Image side (left in RTL) — first on mobile */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative"
+            className="relative order-1 md:order-2"
           >
             {/* Floating Badge */}
             <div className="absolute -top-4 -right-4 z-10 bg-white p-3 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 animate-bounce-slow">
@@ -96,12 +98,14 @@ export function HeroSection({
             </div>
 
             {heroImage ? (
-              <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-gradient-to-b from-[#F5F0E8] via-[#F2F5F0] to-[#E8F2EE] shadow-card">
+              <div className="relative min-h-[260px] aspect-[4/3] w-full overflow-hidden rounded-3xl bg-gradient-to-b from-brand-sand/40 to-white shadow-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={heroImage}
-                  alt="منتجات فيرا بيوتي: زيت المفاصل، رشاش الشعر، وكريم الكلف"
-                  className="absolute inset-0 h-full w-full origin-center scale-[1.22] object-cover object-[50%_46%]"
+                  alt="منتجات فيرا بيوتي: رشاش تساقط الشعر، كريم الكلف، وزيت آلام المفاصل"
+                  className="h-full w-full object-contain object-center p-3 md:p-5"
+                  loading="eager"
+                  fetchPriority="high"
                 />
               </div>
             ) : (

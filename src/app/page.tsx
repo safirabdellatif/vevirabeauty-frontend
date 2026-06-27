@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { SocialProofCarousel } from "@/components/sections/SocialProofCarousel";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
 import { PRODUCT_LIST } from "@/content/products";
+import { PRODUCT_IMAGES } from "@/content/product-images";
 import { REVIEWS } from "@/content/reviews";
 import { FAQS } from "@/content/faqs";
 import Link from "next/link";
@@ -19,31 +20,31 @@ export default function HomePage() {
         subheading="فيرا بيوتي تختار لك 3 منتجات فقط: زيت آلام المفاصل، رشاش تساقط الشعر، وكريم الكلف. تركيبات طبيعية، الدفع عند الاستلام، وتوصيل لجميع مدن المغرب."
         primaryCTA={{ label: "تصفّح المنتجات", href: "/products" }}
         secondaryCTA={{ label: "عن فيرا بيوتي", href: "/about" }}
+        heroImage={PRODUCT_IMAGES.hero}
       />
 
-      <section className="section-padding bg-brand-charcoal text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-brand-teal via-transparent to-transparent"></div>
+      <section className="section-padding bg-brand-mint border-b border-brand-mint/50 relative overflow-hidden">
         <div className="container-max max-w-4xl mx-auto text-center relative z-10">
-          <span className="text-brand-mint font-bold text-sm tracking-wider mb-4 block">لماذا فيرا بيوتي؟</span>
-          <h2 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">
+          <span className="text-brand-teal font-bold text-sm tracking-wider mb-4 block">لماذا فيرا بيوتي؟</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-brand-charcoal mb-6 leading-tight">
             3 منتجات — 3 مشاكل يعاني منها المغاربة كل يوم
           </h2>
-          <p className="text-gray-300 leading-relaxed text-lg md:text-xl mb-8">
+          <p className="text-brand-gray leading-relaxed text-lg md:text-xl mb-8">
             آلام المفاصل، تساقط الشعر، والكلف — مشاكل حقيقية تحتاج حلول عملية.
-            في <span className="text-brand-mint font-bold">فيرا بيوتي</span> نركّز على 3 منتجات فقط بتركيبات طبيعية ومكوّنات مفصّحة، بدون قائمة طويل ولا وعود فارغة.
+            في <span className="text-brand-teal font-bold">فيرا بيوتي</span> نركّز على 3 منتجات فقط بتركيبات طبيعية ومكوّنات مفصّحة، بدون قائمة طويل ولا وعود فارغة.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-brand-mint" />
-              <span className="font-medium">تركيبات طبيعية</span>
+            <div className="bg-white px-6 py-3 rounded-full border border-brand-mint/50 shadow-soft flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-brand-teal" />
+              <span className="font-medium text-brand-charcoal">تركيبات طبيعية</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-brand-mint" />
-              <span className="font-medium">مكوّنات مفصّحة</span>
+            <div className="bg-white px-6 py-3 rounded-full border border-brand-mint/50 shadow-soft flex items-center gap-2">
+              <Heart className="w-5 h-5 text-brand-teal" />
+              <span className="font-medium text-brand-charcoal">مكوّنات مفصّحة</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full border border-white/20 flex items-center gap-2">
-              <Award className="w-5 h-5 text-brand-mint" />
-              <span className="font-medium">ضمان 30 يوم</span>
+            <div className="bg-white px-6 py-3 rounded-full border border-brand-mint/50 shadow-soft flex items-center gap-2">
+              <Award className="w-5 h-5 text-brand-teal" />
+              <span className="font-medium text-brand-charcoal">ضمان 30 يوم</span>
             </div>
           </div>
         </div>
