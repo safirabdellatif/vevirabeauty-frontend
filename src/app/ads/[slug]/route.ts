@@ -1,17 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { resolveEnvSlug } from "@/lib/ad-redirect-slugs";
-import { resolvePublicAdRedirect } from "@/lib/server/ad-redirects";
-import { tryBackendRequest } from "@/lib/server/backend-fetch";
-import { SITE } from "@/content/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-function publicSiteOrigin(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || SITE.url).replace(/\/$/, "");
+type RouteParams = { slug: string };
+
+async function readSlug(params: Promise<RouteParams> | RouteParams): Promise<string> {
+  const resolved = await Promise.resolve(params);
+  return (resolved.slug ?? "").trim().toLowerCase();
 }
 
-function redirectToPath(targetPath: string, searchParams: URLSearchParams): NextResponse {
+function publicOrigin(request: NextRequest): string {
+  return (
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    `${request.nextUrl.protocol}//${request.nextUrl.host}`
+  );
+}
+
+function redirectToPath(
+  request: NextRequest,
+  targetPath: string,
+): NextResponse {
   const trimmed = targetPath.trim();
   let destination: URL;
 
@@ -19,10 +29,13 @@ function redirectToPath(targetPath: string, searchParams: URLSearchParams): Next
     destination = new URL(trimmed);
   } else {
     const path = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
-    destination = new URL(path, publicSiteOrigin());
+    destination = new URL(path, publicOrigin(request));
   }
 
-  searchParams.forEach((value, key) => destination.searchParams.set(key, value));
+  request.nextUrl.searchParams.forEach((value, key) => {
+    destination.searchParams.set(key, value);
+  });
+
   return NextResponse.redirect(destination, 302);
 }
 
@@ -45,9 +58,8 @@ function notFoundResponse(slug: string): NextResponse {
 <body>
   <div class="card">
     <h1>رابط الإعلان غير موجود</h1>
-    <p>الـ slug <code>${slug}</code> غير مسجّل في Redirect Manager.</p>
-    <p>أنشئه من <a href="/redirectvevira">/redirectvevira</a> ثم اختبر نفس الـ slug.</p>
-    <p>Slugs prêts : <code>lp</code>, <code>joint</code>, <code>hair</code>, <code>melasma</code>.</p>
+    <p>الـ slug <code>${slug}</code> غير مسجّل.</p>
+    <p>أنشئه من <a href="/redirectvevira">/redirectvevira</a></p>
   </div>
 </body>
 </html>`;
@@ -62,30 +74,27 @@ async function resolveTargetPath(slug: string): Promise<string | null> {
   const envTarget = resolveEnvSlug(slug);
   if (envTarget) return envTarget;
 
-  const localTarget = await resolvePublicAdRedirect(slug);
-  if (localTarget) return localTarget;
-
-  const proxied = await tryBackendRequest(`/redirects/public/${encodeURIComponent(slug)}`, {
-    method: "GET",
-  });
-  if (proxied?.ok) {
-    const data = (await proxied.json()) as { target_path: string };
-    return data.target_path;
+  try {
+    const { resolvePublicAdRedirect } = await import("@/lib/server/ad-redirects");
+    return await resolvePublicAdRedirect(slug);
+  } catch {
+    return null;
   }
-
-  return null;
 }
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } },
+  context: { params: Promise<RouteParams> | RouteParams },
 ) {
-  const slug = params.slug.trim().toLowerCase();
-  const targetPath = await resolveTargetPath(slug);
+  try {
+    const slug = await readSlug(context.params);
+    if (!slug) return notFoundResponse("");
 
-  if (!targetPath) {
-    return notFoundResponse(slug);
+    const targetPath = await resolveTargetPath(slug);
+    if (!targetPath) return notFoundResponse(slug);
+
+    return redirectToPath(request, targetPath);
+  } catch {
+    return NextResponse.json({ detail: "redirect_failed" }, { status: 500 });
   }
-
-  return redirectToPath(targetPath, request.nextUrl.searchParams);
 }

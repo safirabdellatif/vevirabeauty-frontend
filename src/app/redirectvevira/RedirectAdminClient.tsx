@@ -17,7 +17,6 @@ import {
   REDIRECT_TARGET_OPTIONS,
   buildAdRedirectUrl,
 } from "@/lib/redirect-targets";
-import { DEFAULT_AD_REDIRECTS } from "@/lib/ad-redirect-slugs";
 import { formatApiDetail } from "@/lib/format-api-error";
 
 const API_BASE = "/api/redirect-admin";
@@ -236,7 +235,10 @@ export function RedirectAdminClient() {
         method: "DELETE",
         headers: { Authorization: auth },
       });
-      if (!res.ok) throw new Error("Could not delete redirect.");
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(formatApiDetail(body, "Could not delete redirect."));
+      }
       setNotice("Redirect deleted.");
       await loadRows();
     } catch (err) {
@@ -335,21 +337,6 @@ export function RedirectAdminClient() {
           </div>
         ) : null}
 
-        <section className="rounded-[2rem] border border-brand-teal/30 bg-brand-teal/10 p-6">
-          <h2 className="text-lg font-bold">Slugs intégrés (déjà actifs)</h2>
-          <p className="mt-2 text-sm text-white/70">
-            Pas besoin de les recréer — utilisez directement ces liens pub :
-          </p>
-          <ul className="mt-4 space-y-2 text-sm">
-            {Object.entries(DEFAULT_AD_REDIRECTS).map(([slug, target]) => (
-              <li key={slug} className="flex flex-wrap items-center gap-2 rounded-xl bg-black/20 px-3 py-2">
-                <code className="text-brand-mint">{buildAdRedirectUrl(slug)}</code>
-                <span className="text-white/50">→ {target}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
         <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
           <div className="mb-5 flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-gold text-brand-dark">
@@ -359,10 +346,6 @@ export function RedirectAdminClient() {
               <h2 className="text-xl font-bold">Create redirect</h2>
               <p className="text-sm text-white/60">
                 Ad URL format: <code className="text-brand-mint">/ads/your-slug?utm_source=...</code>
-              </p>
-              <p className="mt-1 text-xs text-white/45">
-                Pour LP, utilisez le slug intégré <code className="text-brand-mint">lp</code> — ou créez{" "}
-                <code className="text-brand-mint">lp-fb</code>, <code className="text-brand-mint">promo-juin</code>, etc.
               </p>
             </div>
           </div>
@@ -468,20 +451,28 @@ export function RedirectAdminClient() {
                           <ExternalLink className="h-4 w-4" />
                           Test
                         </a>
-                        <button
-                          onClick={() => startEdit(row)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm hover:bg-white/10"
-                        >
-                          <Pencil className="h-4 w-4" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => void removeRedirect(row.slug)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 px-3 py-2 text-sm text-red-200 hover:bg-red-500/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Delete
-                        </button>
+                        {row.label !== "env" ? (
+                          <>
+                            <button
+                              onClick={() => startEdit(row)}
+                              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm hover:bg-white/10"
+                            >
+                              <Pencil className="h-4 w-4" />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => void removeRedirect(row.slug)}
+                              className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 px-3 py-2 text-sm text-red-200 hover:bg-red-500/10"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              Delete
+                            </button>
+                          </>
+                        ) : (
+                          <span className="text-xs text-white/40 px-2 py-2">
+                            Easypanel AD_REDIRECTS_JSON
+                          </span>
+                        )}
                       </div>
                     </div>
 

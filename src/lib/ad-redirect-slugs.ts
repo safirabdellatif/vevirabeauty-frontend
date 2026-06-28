@@ -1,14 +1,8 @@
-/** Slugs pub → page cible. Utilisé par middleware + route /ads/[slug]. */
-export const DEFAULT_AD_REDIRECTS: Record<string, string> = {
-  lp: "/lp",
-  vevira: "/lp",
-  joint: "/products/joint-pain-oil",
-  hair: "/products/hair-loss-spray",
-  melasma: "/products/melasma-cream",
-};
+/** Slugs pub → page cible. Admin UI + AD_REDIRECTS_JSON uniquement. */
+export const DEFAULT_AD_REDIRECTS: Record<string, string> = {};
 
 export function getEnvSlugMap(): Record<string, string> {
-  const map = { ...DEFAULT_AD_REDIRECTS };
+  const map: Record<string, string> = {};
   const raw = process.env.AD_REDIRECTS_JSON?.trim();
   if (!raw) return map;
 

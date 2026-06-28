@@ -1,14 +1,5 @@
-/** Slugs pub intégrés au build (backup si middleware absent). */
-const DEFAULT_AD_REDIRECTS = {
-  lp: "/lp",
-  vevira: "/lp",
-  joint: "/products/joint-pain-oil",
-  hair: "/products/hair-loss-spray",
-  melasma: "/products/melasma-cream",
-};
-
 function getAdSlugMap() {
-  const map = { ...DEFAULT_AD_REDIRECTS };
+  const map = {};
   try {
     if (process.env.AD_REDIRECTS_JSON) {
       Object.assign(map, JSON.parse(process.env.AD_REDIRECTS_JSON));

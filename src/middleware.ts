@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { resolveEnvSlug } from "@/lib/ad-redirect-slugs";
 
-export function middleware(request: NextRequest) {
-  const match = request.nextUrl.pathname.match(/^\/ads\/([a-z0-9-]+)\/?$/i);
-  if (!match) return NextResponse.next();
-
-  const target = resolveEnvSlug(match[1]);
-  if (!target) return NextResponse.next();
+function redirectForSlug(request: NextRequest, slug: string): NextResponse | null {
+  const target = resolveEnvSlug(slug);
+  if (!target) return null;
 
   let destination: URL;
   if (target.startsWith("http://") || target.startsWith("https://")) {
@@ -23,6 +20,12 @@ export function middleware(request: NextRequest) {
   return NextResponse.redirect(destination, 302);
 }
 
+export function middleware(request: NextRequest) {
+  const match = request.nextUrl.pathname.match(/^\/ads\/([a-z0-9-]+)\/?$/i);
+  if (!match) return NextResponse.next();
+  return redirectForSlug(request, match[1]) ?? NextResponse.next();
+}
+
 export const config = {
-  matcher: ["/ads/:slug*"],
+  matcher: ["/ads/:path*"],
 };

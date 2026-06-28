@@ -96,11 +96,8 @@ export async function handleLocalRedirectAdmin(
         return Response.json({ detail: "Slug already exists." }, { status: 409 });
       }
       if (error instanceof Error && error.message === "builtin_slug") {
-        const builtIn = Object.keys(getEnvSlugMap()).join(", ");
         return Response.json(
-          {
-            detail: `Slug reserved (built-in): ${builtIn}. Use another name, e.g. lp-fb or promo-juin.`,
-          },
+          { detail: "Ce slug existe déjà dans AD_REDIRECTS_JSON (Easypanel)." },
           { status: 409 },
         );
       }
@@ -130,6 +127,13 @@ export async function handleLocalRedirectAdmin(
   }
 
   if (req.method === "DELETE" && pathParts.length === 2) {
+    const normalized = slug?.trim().toLowerCase() ?? "";
+    if (normalized && normalized in getEnvSlugMap()) {
+      return Response.json(
+        { detail: "Slug défini dans AD_REDIRECTS_JSON (Easypanel) — supprimez-le dans Environment." },
+        { status: 403 },
+      );
+    }
     const deleted = await deleteAdRedirect(slug);
     if (!deleted) return Response.json({ detail: "Redirect not found." }, { status: 404 });
     return Response.json({ ok: true });
