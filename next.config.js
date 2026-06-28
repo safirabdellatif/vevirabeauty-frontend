@@ -1,15 +1,3 @@
-function getAdSlugMap() {
-  const map = {};
-  try {
-    if (process.env.AD_REDIRECTS_JSON) {
-      Object.assign(map, JSON.parse(process.env.AD_REDIRECTS_JSON));
-    }
-  } catch {
-    /* ignore */
-  }
-  return map;
-}
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Force same-origin API even if Easypanel overrides the Dockerfile build arg.
@@ -27,18 +15,11 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {
-    const adRules = Object.entries(getAdSlugMap()).map(([slug, destination]) => ({
-      source: `/ads/${slug}`,
-      destination,
-      permanent: false,
-    }));
-
     return [
       { source: "/dashbord", destination: "/admin", permanent: true },
       { source: "/dashboard", destination: "/admin", permanent: true },
       { source: "/redirecmysanad", destination: "/redirectvevira", permanent: true },
       { source: "/redirecmysanad/:path*", destination: "/redirectvevira/:path*", permanent: true },
-      ...adRules,
     ];
   },
   async headers() {

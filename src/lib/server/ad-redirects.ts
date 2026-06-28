@@ -1,8 +1,11 @@
 import fs from "fs/promises";
+import os from "os";
 import path from "path";
 import { getEnvSlugMap } from "@/lib/ad-redirect-slugs";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
+
+let resolvedStorePath: string | null = null;
 
 export type AdRedirect = {
   slug: string;
@@ -14,15 +17,33 @@ export type AdRedirect = {
   updated_at: string;
 };
 
-function dataFilePath(): string {
+function preferredDataFilePath(): string {
   if (process.env.AD_REDIRECTS_FILE) {
     return process.env.AD_REDIRECTS_FILE;
   }
   return path.join(process.cwd(), "data", "ad-redirects.json");
 }
 
+async function dataFilePath(): Promise<string> {
+  if (resolvedStorePath) return resolvedStorePath;
+
+  const primary = preferredDataFilePath();
+  try {
+    await fs.mkdir(path.dirname(primary), { recursive: true });
+    const probe = `${primary}.write-test`;
+    await fs.writeFile(probe, "ok", "utf8");
+    await fs.unlink(probe);
+    resolvedStorePath = primary;
+    return primary;
+  } catch {
+    const fallback = path.join(os.tmpdir(), "vevira-ad-redirects.json");
+    resolvedStorePath = fallback;
+    return fallback;
+  }
+}
+
 async function ensureStore(): Promise<void> {
-  const file = dataFilePath();
+  const file = await dataFilePath();
   await fs.mkdir(path.dirname(file), { recursive: true });
   try {
     await fs.access(file);
@@ -33,7 +54,7 @@ async function ensureStore(): Promise<void> {
 
 async function readFileRows(): Promise<AdRedirect[]> {
   await ensureStore();
-  const raw = await fs.readFile(dataFilePath(), "utf8");
+  const raw = await fs.readFile(await dataFilePath(), "utf8");
   const parsed = JSON.parse(raw) as AdRedirect[];
   return Array.isArray(parsed) ? parsed : [];
 }
@@ -67,7 +88,12 @@ async function readAll(): Promise<AdRedirect[]> {
 
 async function writeAll(rows: AdRedirect[]): Promise<void> {
   await ensureStore();
-  await fs.writeFile(dataFilePath(), `${JSON.stringify(rows, null, 2)}\n`, "utf8");
+  const file = await dataFilePath();
+  try {
+    await fs.writeFile(file, `${JSON.stringify(rows, null, 2)}\n`, "utf8");
+  } catch {
+    throw new Error("write_failed");
+  }
 }
 
 function nowIso(): string {
@@ -84,6 +110,10 @@ export function normalizeTargetPath(value: string): string | null {
   if (!trimmed.startsWith("/")) return null;
   if (trimmed.startsWith("//") || trimmed.includes("://")) return null;
   return trimmed;
+}
+
+export async function listEnvOnlyRedirects(): Promise<Array<{ slug: string; target_path: string }>> {
+  return Object.entries(getEnvSlugMap()).map(([slug, target_path]) => ({ slug, target_path }));
 }
 
 export async function listAdRedirects(): Promise<AdRedirect[]> {

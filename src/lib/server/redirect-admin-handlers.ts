@@ -6,6 +6,7 @@ import {
   createAdRedirect,
   deleteAdRedirect,
   listAdRedirects,
+  listEnvOnlyRedirects,
   updateAdRedirect,
 } from "@/lib/server/ad-redirects";
 
@@ -61,6 +62,16 @@ function badRequest(message: string): Response {
   return Response.json({ detail: message }, { status: 400 });
 }
 
+function storageError(): Response {
+  return Response.json(
+    {
+      detail:
+        "Impossible d'enregistrer sur le disque du serveur. Vérifiez les permissions ou montez un volume sur /app/data.",
+    },
+    { status: 507 },
+  );
+}
+
 export async function handleLocalRedirectAdmin(
   req: NextRequest,
   pathParts: string[],
@@ -74,6 +85,10 @@ export async function handleLocalRedirectAdmin(
 
   if (resource !== "redirects") {
     return Response.json({ detail: "Not found" }, { status: 404 });
+  }
+
+  if (req.method === "GET" && pathParts.length === 2 && slug === "_env") {
+    return Response.json(await listEnvOnlyRedirects());
   }
 
   if (req.method === "GET" && pathParts.length === 1) {
@@ -93,6 +108,7 @@ export async function handleLocalRedirectAdmin(
       const row = await createAdRedirect(body.slug ?? "", body.target_path ?? "", body.label ?? "");
       return Response.json(row, { status: 201 });
     } catch (error) {
+      if (error instanceof Error && error.message === "write_failed") return storageError();
       if (error instanceof Error && error.message === "duplicate_slug") {
         return Response.json({ detail: "Slug already exists." }, { status: 409 });
       }
@@ -128,21 +144,42 @@ export async function handleLocalRedirectAdmin(
   }
 
   if (req.method === "DELETE" && pathParts.length === 2 && slug === "_clear") {
-    const count = await clearAllAdRedirects();
-    return Response.json({ ok: true, deleted: count });
+    try {
+      const count = await clearAllAdRedirects();
+      return Response.json({ ok: true, deleted: count });
+    } catch (error) {
+      if (error instanceof Error && error.message === "write_failed") return storageError();
+      throw error;
+    }
   }
 
   if (req.method === "DELETE" && pathParts.length === 2) {
     const normalized = slug?.trim().toLowerCase() ?? "";
     if (normalized && normalized in getEnvSlugMap()) {
       return Response.json(
-        { detail: "Slug défini dans AD_REDIRECTS_JSON (Easypanel) — supprimez-le dans Environment." },
+        {
+          detail:
+            "Ce slug vient de AD_REDIRECTS_JSON sur Easypanel — supprimez la variable Environment puis redeploy.",
+        },
         { status: 403 },
       );
     }
-    const deleted = await deleteAdRedirect(slug);
-    if (!deleted) return Response.json({ detail: "Redirect not found." }, { status: 404 });
-    return Response.json({ ok: true });
+    try {
+      const deleted = await deleteAdRedirect(slug);
+      if (!deleted) {
+        return Response.json(
+          {
+            detail:
+              "Slug introuvable dans la base. S'il redirige encore, il est peut-être dans AD_REDIRECTS_JSON (Easypanel) ou un ancien build — redeploy après suppression.",
+          },
+          { status: 404 },
+        );
+      }
+      return Response.json({ ok: true });
+    } catch (error) {
+      if (error instanceof Error && error.message === "write_failed") return storageError();
+      throw error;
+    }
   }
 
   return Response.json({ detail: "Not found" }, { status: 404 });

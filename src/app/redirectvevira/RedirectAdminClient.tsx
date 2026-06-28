@@ -59,6 +59,7 @@ export function RedirectAdminClient() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rows, setRows] = useState<RedirectRow[]>([]);
+  const [envSlugs, setEnvSlugs] = useState<Array<{ slug: string; target_path: string }>>([]);
   const [loading, setLoading] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [error, setError] = useState("");
@@ -97,6 +98,15 @@ export function RedirectAdminClient() {
       }
       const rows = (await res.json()) as RedirectRow[];
       setRows(rows);
+
+      const envRes = await fetch(`${API_BASE}/redirects/_env`, {
+        headers: { Authorization: auth },
+      });
+      if (envRes.ok) {
+        setEnvSlugs((await envRes.json()) as Array<{ slug: string; target_path: string }>);
+      } else {
+        setEnvSlugs([]);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not load redirects.");
     } finally {
@@ -236,6 +246,7 @@ export function RedirectAdminClient() {
         throw new Error(formatApiDetail(body, "Suppression impossible."));
       }
       setNotice(`${body.deleted ?? 0} slug(s) supprimé(s).`);
+      setRows([]);
       await loadRows();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Suppression impossible.");
@@ -256,6 +267,7 @@ export function RedirectAdminClient() {
         throw new Error(formatApiDetail(body, "Could not delete redirect."));
       }
       setNotice("Redirect deleted.");
+      setRows((prev) => prev.filter((row) => row.slug !== slug));
       await loadRows();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Could not delete redirect.");
@@ -425,7 +437,7 @@ export function RedirectAdminClient() {
           {loading ? (
             <p className="text-sm text-white/60">Loading...</p>
           ) : rows.length === 0 ? (
-            <p className="text-sm text-white/60">No redirects yet.</p>
+            <p className="text-sm text-white/60">Aucun slug enregistré via l&apos;admin.</p>
           ) : (
             <div className="space-y-4">
               {rows.map((row) => {
@@ -540,6 +552,24 @@ export function RedirectAdminClient() {
               })}
             </div>
           )}
+
+          {envSlugs.length > 0 ? (
+            <div className="mt-8 rounded-2xl border border-amber-400/20 bg-amber-500/10 p-4">
+              <h3 className="font-bold text-amber-100">Slugs Easypanel (AD_REDIRECTS_JSON)</h3>
+              <p className="mt-2 text-sm text-amber-100/80">
+                Non supprimables ici — retirez <code className="text-white">AD_REDIRECTS_JSON</code> dans
+                Easypanel → Environment → redeploy.
+              </p>
+              <ul className="mt-3 space-y-2 text-sm">
+                {envSlugs.map(({ slug, target_path }) => (
+                  <li key={slug} className="rounded-xl bg-black/20 px-3 py-2">
+                    <code className="text-brand-mint">{buildAdRedirectUrl(slug)}</code>
+                    <span className="text-white/50"> → {target_path}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </section>
       </div>
     </main>
