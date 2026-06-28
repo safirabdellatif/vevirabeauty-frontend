@@ -2,6 +2,7 @@ import { timingSafeEqual } from "crypto";
 import type { NextRequest } from "next/server";
 import { getEnvSlugMap } from "@/lib/ad-redirect-slugs";
 import {
+  clearAllAdRedirects,
   createAdRedirect,
   deleteAdRedirect,
   listAdRedirects,
@@ -124,6 +125,11 @@ export async function handleLocalRedirectAdmin(
     } catch {
       return badRequest("Invalid target path.");
     }
+  }
+
+  if (req.method === "DELETE" && pathParts.length === 2 && slug === "_clear") {
+    const count = await clearAllAdRedirects();
+    return Response.json({ ok: true, deleted: count });
   }
 
   if (req.method === "DELETE" && pathParts.length === 2) {

@@ -87,8 +87,14 @@ export function normalizeTargetPath(value: string): string | null {
 }
 
 export async function listAdRedirects(): Promise<AdRedirect[]> {
-  const rows = await readAll();
+  const rows = await readFileRows();
   return rows.sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+export async function clearAllAdRedirects(): Promise<number> {
+  const rows = await readFileRows();
+  await writeAll([]);
+  return rows.length;
 }
 
 export async function getAdRedirect(slug: string): Promise<AdRedirect | null> {

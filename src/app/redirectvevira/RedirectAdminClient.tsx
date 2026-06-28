@@ -226,6 +226,26 @@ export function RedirectAdminClient() {
     }
   }
 
+  async function removeAllRedirects() {
+    if (!confirm("Supprimer TOUS les slugs enregistrés ?")) return;
+    setError("");
+    setNotice("");
+    try {
+      const res = await fetch(`${API_BASE}/redirects/_clear`, {
+        method: "DELETE",
+        headers: { Authorization: auth },
+      });
+      const body = (await res.json().catch(() => ({}))) as { deleted?: number; detail?: unknown };
+      if (!res.ok) {
+        throw new Error(formatApiDetail(body, "Suppression impossible."));
+      }
+      setNotice(`${body.deleted ?? 0} slug(s) supprimé(s).`);
+      await loadRows();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Suppression impossible.");
+    }
+  }
+
   async function removeRedirect(slug: string) {
     if (!confirm(`Delete redirect "${slug}"?`)) return;
     setError("");
@@ -382,16 +402,28 @@ export function RedirectAdminClient() {
         </section>
 
         <section className="rounded-[2rem] border border-white/10 bg-white/5 p-6">
-          <div className="mb-5 flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-teal text-white">
-              <Link2 className="h-5 w-5" />
-            </span>
-            <div>
-              <h2 className="text-xl font-bold">Active redirects</h2>
-              <p className="text-sm text-white/60">
-                Query params from the ad URL are preserved on redirect.
-              </p>
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-teal text-white">
+                <Link2 className="h-5 w-5" />
+              </span>
+              <div>
+                <h2 className="text-xl font-bold">Active redirects</h2>
+                <p className="text-sm text-white/60">
+                  Query params from the ad URL are preserved on redirect.
+                </p>
+              </div>
             </div>
+            {rows.length > 0 ? (
+              <button
+                type="button"
+                onClick={() => void removeAllRedirects()}
+                className="inline-flex items-center gap-2 rounded-2xl border border-red-400/30 px-4 py-2 text-sm text-red-200 hover:bg-red-500/10"
+              >
+                <Trash2 className="h-4 w-4" />
+                Supprimer tout
+              </button>
+            ) : null}
           </div>
 
           {loading ? (
@@ -451,28 +483,20 @@ export function RedirectAdminClient() {
                           <ExternalLink className="h-4 w-4" />
                           Test
                         </a>
-                        {row.label !== "env" ? (
-                          <>
-                            <button
-                              onClick={() => startEdit(row)}
-                              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm hover:bg-white/10"
-                            >
-                              <Pencil className="h-4 w-4" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => void removeRedirect(row.slug)}
-                              className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 px-3 py-2 text-sm text-red-200 hover:bg-red-500/10"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                              Delete
-                            </button>
-                          </>
-                        ) : (
-                          <span className="text-xs text-white/40 px-2 py-2">
-                            Easypanel AD_REDIRECTS_JSON
-                          </span>
-                        )}
+                        <button
+                          onClick={() => startEdit(row)}
+                          className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm hover:bg-white/10"
+                        >
+                          <Pencil className="h-4 w-4" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => void removeRedirect(row.slug)}
+                          className="inline-flex items-center gap-2 rounded-xl border border-red-400/20 px-3 py-2 text-sm text-red-200 hover:bg-red-500/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          Delete
+                        </button>
                       </div>
                     </div>
 
