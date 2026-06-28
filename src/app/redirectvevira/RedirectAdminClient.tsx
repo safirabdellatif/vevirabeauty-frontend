@@ -33,11 +33,7 @@ type RedirectRow = {
 };
 
 function basicAuth(username: string, password: string) {
-  const raw = `${username.trim()}:${password}`;
-  const bytes = new TextEncoder().encode(raw);
-  let binary = "";
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return `Basic ${btoa(binary)}`;
+  return `Basic ${btoa(`${username.trim()}:${password}`)}`;
 }
 
 /** pain face → pain-face */
