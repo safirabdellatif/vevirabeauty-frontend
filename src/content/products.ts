@@ -152,12 +152,12 @@ export const PRODUCTS: Record<ProductId, Product> = {
       "مينوكسيديل 5% — مكوّن سريري موثوق لإعادة النمو",
       "يعيد تنشيط البصيلات الخاملة ويقلّل التساقط",
       "محلول موضعي بدون رائحة — امتصاص سريع",
-      "سهل التطبيق بالقطارة مرتين يوميًا",
+      "سهل التطبيق بالرشّ مرتين يوميًا",
       "مناسب للرجال — Extra Strength",
     ],
     features: [
       { title: "مينوكسيديل 5%", body: "نفس المكوّن النشط في العلاجات العالمية المعتمدة.", icon: "badge-check" },
-      { title: "محلول موضعي", body: "تطبيق مباشر على فروة الرأس بالقطارة — بدون رشّ.", icon: "heart" },
+      { title: "محلول موضعي", body: "رشّ مباشر على فروة الرأس — تطبيق سريع ومتساوٍ.", icon: "heart" },
       { title: "روتين يومي", body: "1 ml مرتين يوميًا على فروة رأس نظيفة وجافة.", icon: "moon" },
       { title: "بدون عطر", body: "Unscented — مناسب للاستخدام اليومي دون إزعاج.", icon: "armchair" },
     ],
@@ -185,7 +185,7 @@ export const PRODUCTS: Record<ProductId, Product> = {
     cardImage: PRODUCT_IMAGES.hair_loss_spray_card,
     galleryImages: [
       { src: featureImagePaths("hair-loss-spray")[0], alt: "مينوكسيديل 5% — مكوّن نشط موثوق" },
-      { src: featureImagePaths("hair-loss-spray")[1], alt: "محلول موضعي — تطبيق بالقطارة" },
+      { src: featureImagePaths("hair-loss-spray")[1], alt: "محلول موضعي — تطبيق بالرشّ" },
       { src: featureImagePaths("hair-loss-spray")[2], alt: "روتين يومي — مرتين في اليوم" },
     ],
     featureImages: featureImagePaths("hair-loss-spray"),

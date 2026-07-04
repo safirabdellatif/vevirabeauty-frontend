@@ -47,7 +47,7 @@ Morocco audience, photorealistic, no extra text overlay, no watermark.
 | File | Prompt focus |
 |------|----------------|
 | feature-1 | Minoxidil 5% clinical + reference Vevira spray bottle |
-| feature-2 | Dropper/scalp application + reference product |
+| feature-2 | Spray/scalp application + reference product |
 | feature-3 | Twice daily routine + reference product |
 | feature-4 | Unscented clear solution + reference product |
 | lifestyle-1 | Hair in shower drain + reference product on shelf |
