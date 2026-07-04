@@ -63,9 +63,17 @@ export interface Product {
 
 export const OFFERS: ProductOffer[] = [
   { quantity: 1, price: 199, label: "قطعة واحدة", badge: "للتجربة" },
-  { quantity: 2, price: 289, label: "قطعتان", badge: "الأكثر طلبًا" },
+  { quantity: 2, price: 289, label: "قطعتان", badge: "الأكثر طلبًا", defaultSelected: true },
   { quantity: 3, price: 369, label: "3 قطع", badge: "أفضل قيمة" },
 ];
+
+export function getDefaultOffer(offers: ProductOffer[] = OFFERS): ProductOffer {
+  return (
+    offers.find((o) => o.defaultSelected) ??
+    offers.find((o) => o.quantity === 2) ??
+    offers[0]
+  );
+}
 
 const DISCLAIMER =
   "منتج عناية للاستخدام الخارجي. النتائج تختلف من شخص لآخر مع الاستمرار، وليس بديلاً عن استشارة الطبيب أو الصيدلي.";

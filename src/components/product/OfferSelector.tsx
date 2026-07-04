@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import type { ProductOffer } from "@/content/products";
+import { getDefaultOffer } from "@/content/products";
 import { formatSARCompact } from "@/lib/money";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ interface OfferSelectorProps {
 }
 
 export function OfferSelector({ offers, onOfferChange }: OfferSelectorProps) {
-  const [selected, setSelected] = useState<ProductOffer>(offers[0]);
+  const [selected, setSelected] = useState<ProductOffer>(() => getDefaultOffer(offers));
 
   const handleSelect = (offer: ProductOffer) => {
     setSelected(offer);

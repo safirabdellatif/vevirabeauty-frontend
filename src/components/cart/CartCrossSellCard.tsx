@@ -2,7 +2,7 @@
 
 import { Plus } from "lucide-react";
 import type { ProductId } from "@/content/products";
-import { PRODUCTS, OFFERS } from "@/content/products";
+import { PRODUCTS, OFFERS, getDefaultOffer } from "@/content/products";
 import { useCartStore } from "@/stores/cart-store";
 import { ProductThumbnail } from "@/components/product/ProductThumbnail";
 import { formatSARCompact } from "@/lib/money";
@@ -19,14 +19,14 @@ export function CartCrossSellCard({ productId, reason }: CartCrossSellCardProps)
   const product = PRODUCTS[productId];
   if (!product) return null;
 
-  const offer = OFFERS.find((o) => o.quantity === 1)!;
+  const offer = getDefaultOffer(OFFERS);
 
   const handleAdd = () => {
     const eventId = generateEventId("AddToCart");
     addItem({
       productId,
       productName: product.nameAr,
-      quantity: 1,
+      quantity: offer.quantity,
       unitBundlePrice: offer.price,
       offerPrice: offer.price,
       offerLabel: offer.label,

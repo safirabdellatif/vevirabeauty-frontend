@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Star, ShoppingBag, ShieldCheck, ChevronLeft, Award, CheckCircle2, HeartHandshake, Shield, Truck, Clock, Droplets, Coffee, Smile, CalendarDays } from "lucide-react";
 import Link from "next/link";
 import type { Product, ProductOffer } from "@/content/products";
+import { getDefaultOffer } from "@/content/products";
 import { useCartStore } from "@/stores/cart-store";
 import { OfferSelector } from "@/components/product/OfferSelector";
 import { StickyProductCTA } from "@/components/product/StickyProductCTA";
@@ -126,7 +127,7 @@ const USAGE_PROTOCOL: Record<string, UsageProtocol> = {
 
 export function ProductPageClient({ product }: ProductPageClientProps) {
   const { addItem, openCart } = useCartStore();
-  const [selectedOffer, setSelectedOffer] = useState<ProductOffer>(product.offers[0]);
+  const [selectedOffer, setSelectedOffer] = useState<ProductOffer>(() => getDefaultOffer(product.offers));
   const [showSticky, setShowSticky] = useState(false);
   const heroImage = product.mainImage ?? "";
 
@@ -216,7 +217,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
                 ))}
               </ul>
 
-              {/* Offers — 199 MAD first, others on click */}
+              {/* Offers — 2 bottles (289 MAD) selected by default */}
               <div className="mb-6 bg-brand-sand/30 p-5 rounded-2xl border border-brand-sand">
                 <p className="text-base font-bold text-brand-charcoal mb-4">اختر العرض المناسب لك:</p>
                 <OfferSelector

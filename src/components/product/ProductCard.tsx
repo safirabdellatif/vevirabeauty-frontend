@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Star, ShieldCheck, Truck } from "lucide-react";
 import type { Product } from "@/content/products";
+import { getDefaultOffer } from "@/content/products";
 import { ImagePlaceholder } from "./ImagePlaceholder";
 import { formatSARCompact } from "@/lib/money";
 import { PRODUCT_CARD_IMAGE_CLASS } from "@/lib/product-image-display";
@@ -11,7 +12,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, showCTA = true }: ProductCardProps) {
-  const defaultOffer = product.offers.find((o) => o.defaultSelected) ?? product.offers[0];
+  const defaultOffer = getDefaultOffer(product.offers);
   return (
     <div className="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300 flex flex-col relative group">
       {/* Warranty Badge */}
@@ -55,14 +56,15 @@ export function ProductCard({ product, showCTA = true }: ProductCardProps) {
         </p>
 
         <div className="bg-gray-50 rounded-2xl p-4 mb-5">
-          <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-bold bg-brand-teal text-white px-2 py-1 rounded-full">
-              {defaultOffer?.badge}
+              {defaultOffer.badge}
             </span>
             <span className="font-extrabold text-brand-teal text-xl">
-              {formatSARCompact(defaultOffer?.price ?? 289)}
+              {formatSARCompact(defaultOffer.price)}
             </span>
           </div>
+          <p className="text-xs font-semibold text-brand-charcoal text-left mb-2">{defaultOffer.label}</p>
           <div className="flex items-center gap-2 text-xs text-brand-gray font-medium">
             <Truck className="w-3.5 h-3.5 text-brand-teal" />
             <span>توصيل سريع (2-4 أيام)</span>
