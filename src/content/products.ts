@@ -120,11 +120,14 @@ export const PRODUCTS: Record<ProductId, Product> = {
     ],
     cardImage: PRODUCT_IMAGES.joint_pain_oil_card,
     galleryImages: [
-      { src: featureImagePaths("joint-pain-oil")[0], alt: "مزيج زيوت طبيعية — تركيبة غنية" },
+      { src: PRODUCT_IMAGES.joint_pain_oil_card, alt: "زيت آلام المفاصل — صورة المنتج" },
       { src: featureImagePaths("joint-pain-oil")[1], alt: "امتصاص سريع — قوام خفيف" },
       { src: featureImagePaths("joint-pain-oil")[2], alt: "تدليك بسيط — 2–3 دقائق" },
     ],
-    featureImages: featureImagePaths("joint-pain-oil"),
+    featureImages: [
+      PRODUCT_IMAGES.joint_pain_oil_card,
+      ...featureImagePaths("joint-pain-oil").slice(1),
+    ],
     lifestyleImages: lifestyleImageEntries("joint-pain-oil", [
       "آلام الركبة — تخفيف موضعي",
       "تيبّس الرسغ واليدين — تدليك يومي",
