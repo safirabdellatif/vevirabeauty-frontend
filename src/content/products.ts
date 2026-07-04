@@ -120,16 +120,16 @@ export const PRODUCTS: Record<ProductId, Product> = {
     ],
     cardImage: PRODUCT_IMAGES.joint_pain_oil_card,
     galleryImages: [
-      { src: featureImagePaths("joint-pain-oil")[0], alt: "زيت آلام المفاصل — صورة المنتج" },
-      { src: featureImagePaths("joint-pain-oil")[1], alt: "تركيبة زيوت طبيعية" },
-      { src: featureImagePaths("joint-pain-oil")[2], alt: "تدليك يومي على المنطقة المؤلمة" },
+      { src: featureImagePaths("joint-pain-oil")[0], alt: "آلام المفاصل — الركبة والظهر والكتف" },
+      { src: featureImagePaths("joint-pain-oil")[1], alt: "تخفيف آلام الركبة عند التدليك" },
+      { src: featureImagePaths("joint-pain-oil")[2], alt: "عناية بالمفاصل للكبار" },
     ],
     featureImages: featureImagePaths("joint-pain-oil"),
     lifestyleImages: lifestyleImageEntries("joint-pain-oil", [
-      "زيت المفاصل — الاستخدام اليومي",
-      "تركيبة طبيعية للمفاصل",
-      "راحة ومرونة مع الاستمرار",
-      "عناية يومية بالمفاصل",
+      "آلام الركبة — تخفيف موضعي",
+      "الرسغ واليدين — تدليك يومي",
+      "آلام المفاصل بعد الجهد",
+      "راحة للمفاصل مع التقدم في السن",
     ]),
   },
   hair_loss_spray: {
