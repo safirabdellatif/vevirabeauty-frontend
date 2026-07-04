@@ -32,7 +32,7 @@ const FEATURE_SECTION_COPY: Record<string, { title: string; subtitle: string }> 
   },
   hair_loss_spray: {
     title: "الحل اللي صممناه لتقوية الشعر",
-    subtitle: "مينوكسيديل 5% — روتين يومي بسيط لفروة الرأس.",
+    subtitle: "رشاش ضد تساقط الشعر — روتين يومي بسيط لفروة الرأس.",
   },
   melasma_cream: {
     title: "الحل اللي صممناه لبشرة موحّدة",
