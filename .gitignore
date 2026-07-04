@@ -33,3 +33,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local AI scene sources (~50MB); regenerate per IMAGE-GENERATION.md
+/scripts/scene-sources/
