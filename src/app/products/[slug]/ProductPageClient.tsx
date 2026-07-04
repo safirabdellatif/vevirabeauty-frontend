@@ -19,6 +19,7 @@ import { formatSARCompact } from "@/lib/money";
 import { generateEventId } from "@/lib/events";
 import { trackAddToCart, trackViewContent } from "@/lib/analytics";
 import { PRODUCT_PAGE_IMAGE_CLASS } from "@/lib/product-image-display";
+import { featureImagePath, lifestyleImagePath } from "@/lib/product-detail-images";
 
 interface ProductPageClientProps {
   product: Product;
@@ -339,16 +340,24 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
           <div className="space-y-20">
             {product.features.map((feature, index) => {
               const isEven = index % 2 === 0;
+              const featureSrc =
+                product.featureImages?.[index] ?? featureImagePath(product.slug, index);
+              const fallbackSrc = product.cardImage ?? product.mainImage ?? "";
               return (
                 <div key={index} className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-10 items-center`}>
                   <div className="w-full md:w-1/2">
-                    {product.featureImages?.[index] ? (
+                    {featureSrc || fallbackSrc ? (
                       <div className="h-80 md:h-[400px] rounded-3xl shadow-card w-full overflow-hidden bg-gradient-to-b from-brand-sand/30 to-white">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={product.featureImages[index]}
+                          src={featureSrc || fallbackSrc}
                           alt={feature.title}
                           className="h-full w-full object-cover object-center"
+                          onError={(e) => {
+                            if (fallbackSrc && e.currentTarget.src !== fallbackSrc) {
+                              e.currentTarget.src = fallbackSrc;
+                            }
+                          }}
                         />
                       </div>
                     ) : (
@@ -532,13 +541,35 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
             شوف المنتج على الطبيعة
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {product.lifestyleImages?.map((item, i) => (
+            {(product.lifestyleImages?.length
+              ? product.lifestyleImages
+              : product.imagePlaceholders.map((item, i) => ({
+                  src: lifestyleImagePath(product.slug, i),
+                  alt: item.alt,
+                }))
+            )
+              .map((item, i) => ({
+                ...item,
+                src: item.src || lifestyleImagePath(product.slug, i),
+              }))
+              .filter((item) => item.src)
+              .map((item, i) => (
               <div
                 key={i}
                 className="rounded-3xl aspect-[3/4] shadow-soft hover:shadow-card transition-all transform hover:-translate-y-1 relative overflow-hidden"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.src} alt={item.alt} className="h-full w-full object-cover object-center" />
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  className="h-full w-full object-cover object-center"
+                  onError={(e) => {
+                    const fallback = product.cardImage ?? product.mainImage ?? "";
+                    if (fallback && e.currentTarget.src !== fallback) {
+                      e.currentTarget.src = fallback;
+                    }
+                  }}
+                />
               </div>
             ))}
           </div>

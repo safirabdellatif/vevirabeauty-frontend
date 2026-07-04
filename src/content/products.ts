@@ -1,4 +1,5 @@
 import { PRODUCT_IMAGES } from "@/content/product-images";
+import { featureImagePaths, lifestyleImageEntries } from "@/lib/product-detail-images";
 
 export type ProductId = "joint_pain_oil" | "hair_loss_spray" | "melasma_cream";
 
@@ -118,6 +119,18 @@ export const PRODUCTS: Record<ProductId, Product> = {
       { alt: "راحة المفاصل", label: "راحة ومرونة" },
     ],
     cardImage: PRODUCT_IMAGES.joint_pain_oil_card,
+    galleryImages: [
+      { src: featureImagePaths("joint-pain-oil")[0], alt: "زيت آلام المفاصل — صورة المنتج" },
+      { src: featureImagePaths("joint-pain-oil")[1], alt: "تركيبة زيوت طبيعية" },
+      { src: featureImagePaths("joint-pain-oil")[2], alt: "تدليك يومي على المنطقة المؤلمة" },
+    ],
+    featureImages: featureImagePaths("joint-pain-oil"),
+    lifestyleImages: lifestyleImageEntries("joint-pain-oil", [
+      "زيت المفاصل — الاستخدام اليومي",
+      "تركيبة طبيعية للمفاصل",
+      "راحة ومرونة مع الاستمرار",
+      "عناية يومية بالمفاصل",
+    ]),
   },
   hair_loss_spray: {
     id: "hair_loss_spray",
@@ -169,6 +182,18 @@ export const PRODUCTS: Record<ProductId, Product> = {
       { alt: "شعر أكثف", label: "نتائج تدريجية" },
     ],
     cardImage: PRODUCT_IMAGES.hair_loss_spray_card,
+    galleryImages: [
+      { src: featureImagePaths("hair-loss-spray")[0], alt: "مينوكسيديل 5% — صورة المنتج" },
+      { src: featureImagePaths("hair-loss-spray")[1], alt: "تطبيق بالقطارة على فروة الرأس" },
+      { src: featureImagePaths("hair-loss-spray")[2], alt: "محلول موضعي بدون عطر" },
+    ],
+    featureImages: featureImagePaths("hair-loss-spray"),
+    lifestyleImages: lifestyleImageEntries("hair-loss-spray", [
+      "روتين يومي لتقوية الشعر",
+      "مينوكسيديل 5% — Extra Strength",
+      "عناية من الجذور",
+      "استخدام يومي لفروة الرأس",
+    ]),
   },
   melasma_cream: {
     id: "melasma_cream",
@@ -218,6 +243,18 @@ export const PRODUCTS: Record<ProductId, Product> = {
       { alt: "إشراقة طبيعية", label: "إشراقة ونضارة" },
     ],
     cardImage: PRODUCT_IMAGES.melasma_cream_card,
+    galleryImages: [
+      { src: featureImagePaths("melasma-cream")[0], alt: "كريم الكلف — صورة المنتج" },
+      { src: featureImagePaths("melasma-cream")[1], alt: "تركيبة تفتيح طبيعية" },
+      { src: featureImagePaths("melasma-cream")[2], alt: "روتين صباح ومساء" },
+    ],
+    featureImages: featureImagePaths("melasma-cream"),
+    lifestyleImages: lifestyleImageEntries("melasma-cream", [
+      "كريم الكلف — العناية اليومية",
+      "بشرة موحّدة ومشرقة",
+      "تفتيح تدريجي للبقع",
+      "روتين العناية بالبشرة",
+    ]),
   },
 };
 

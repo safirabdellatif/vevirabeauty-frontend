@@ -6,7 +6,7 @@ import jointPainOilCard from "@/assets/products/joint-pain-oil-card.png";
 import melasmaCream from "@/assets/products/melasma-cream.png";
 import melasmaCreamCard from "@/assets/products/melasma-cream-card.png";
 
-/** URLs bundlées par Next.js — disponibles après build sans dépendre de public/ */
+/** URLs bundlées par Next.js — hero + cartes produit */
 export const PRODUCT_IMAGES = {
   hero: hero.src,
   joint_pain_oil: jointPainOil.src,
