@@ -25,6 +25,21 @@ interface ProductPageClientProps {
   product: Product;
 }
 
+const FEATURE_SECTION_COPY: Record<string, { title: string; subtitle: string }> = {
+  joint_pain_oil: {
+    title: "الحل اللي صممناه لراحة المفاصل",
+    subtitle: "زيت طبيعي للتدليك اليومي — ركبة، ظهر، يدين ورسغ.",
+  },
+  hair_loss_spray: {
+    title: "الحل اللي صممناه لتقوية الشعر",
+    subtitle: "مينوكسيديل 5% — روتين يومي بسيط لفروة الرأس.",
+  },
+  melasma_cream: {
+    title: "الحل اللي صممناه لبشرة موحّدة",
+    subtitle: "كريم متخصص في الكلف والبقع — روتين صباح ومساء.",
+  },
+};
+
 const ACTIVE_INGREDIENTS_COPY: Record<string, string> = {
   joint_pain_oil:
     "مزيج من الزيوت الأساسية والمكوّنات النباتية يُدلك على المنطقة المؤلمة لتهدئة الألم وتحسين المرونة.",
@@ -330,10 +345,11 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
         <div className="container-max">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-charcoal mb-4">
-              الحل اللي صممناه خصيصًا لإطلالتك
+              {FEATURE_SECTION_COPY[product.id]?.title ?? "الحل اللي صممناه خصيصًا لإطلالتك"}
             </h2>
             <p className="text-brand-gray text-lg max-w-2xl mx-auto">
-              كل تفصيلة في فيرا بيوتي مدروسة بعناية لتمنحك نتيجة تجميلية واضحة مع الاستمرار.
+              {FEATURE_SECTION_COPY[product.id]?.subtitle ??
+                "كل تفصيلة في فيرا بيوتي مدروسة بعناية لتمنحك نتيجة تجميلية واضحة مع الاستمرار."}
             </p>
           </div>
 
@@ -540,7 +556,7 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-charcoal mb-8 text-center">
             شوف المنتج على الطبيعة
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4" dir="ltr">
             {(product.lifestyleImages?.length
               ? product.lifestyleImages
               : product.imagePlaceholders.map((item, i) => ({
@@ -554,22 +570,24 @@ export function ProductPageClient({ product }: ProductPageClientProps) {
               }))
               .filter((item) => item.src)
               .map((item, i) => (
-              <div
-                key={i}
-                className="rounded-3xl aspect-[3/4] shadow-soft hover:shadow-card transition-all transform hover:-translate-y-1 relative overflow-hidden"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="h-full w-full object-cover object-center"
-                  onError={(e) => {
-                    const fallback = product.cardImage ?? product.mainImage ?? "";
-                    if (fallback && e.currentTarget.src !== fallback) {
-                      e.currentTarget.src = fallback;
-                    }
-                  }}
-                />
+              <div key={i} className="flex flex-col gap-2">
+                <div className="rounded-3xl aspect-[3/4] shadow-soft hover:shadow-card transition-all transform hover:-translate-y-1 relative overflow-hidden">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.src}
+                    alt={item.alt}
+                    className="h-full w-full object-cover object-center"
+                    onError={(e) => {
+                      const fallback = product.cardImage ?? product.mainImage ?? "";
+                      if (fallback && e.currentTarget.src !== fallback) {
+                        e.currentTarget.src = fallback;
+                      }
+                    }}
+                  />
+                </div>
+                <p className="text-center text-sm font-semibold text-brand-charcoal leading-snug px-1" dir="rtl">
+                  {item.alt}
+                </p>
               </div>
             ))}
           </div>
