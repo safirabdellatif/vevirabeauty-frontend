@@ -2,8 +2,8 @@ import jointPainOil from "@/assets/products/joint-pain-oil.png";
 import jointPainOilCard from "@/assets/products/joint-pain-oil-card.png";
 import hairLossSpray from "@/assets/products/hair-loss-spray.jpg";
 import hairLossSprayCard from "@/assets/products/hair-loss-spray-card.jpg";
-import melasmaCream from "@/assets/products/melasma-cream.png";
-import melasmaCreamCard from "@/assets/products/melasma-cream-card.png";
+import melasmaCream from "@/assets/products/melasma-cream.jpg";
+import melasmaCreamCard from "@/assets/products/melasma-cream-card.jpg";
 
 /** URLs bundlées par Next.js — cartes produit.
  *  Hero depuis /public pour pouvoir le remplacer sans rebuild. */
