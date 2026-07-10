@@ -49,9 +49,9 @@ def main() -> None:
     main = cover_fill(hero, MAIN_SIZE)
 
     for folder in (ASSETS, PUBLIC):
-        card.save(folder / "hair-loss-spray-card.png", "PNG", optimize=True)
-        main.save(folder / "hair-loss-spray.png", "PNG", optimize=True)
-        print(f"{folder.name}/hair-loss-spray-card.png + hair-loss-spray.png")
+        card.save(folder / "hair-loss-spray-card.jpg", "JPEG", quality=85, optimize=True, progressive=True)
+        main.save(folder / "hair-loss-spray.jpg", "JPEG", quality=85, optimize=True, progressive=True)
+        print(f"{folder.name}/hair-loss-spray-card.jpg + hair-loss-spray.jpg")
 
     for src_name, dest_names in MAPPING.items():
         if src_name == "hair-loss-spray-product-hero.png":
@@ -63,9 +63,9 @@ def main() -> None:
         size = LIFESTYLE_SIZE if "lifestyle" in src_name else FEATURE_SIZE
         out = cover_fill(im, size)
         for dest_name in dest_names:
-            for folder in (ASSETS, PUBLIC):
-                out.save(folder / dest_name, "PNG", optimize=True)
-                print(f"{folder.name}/{dest_name}")
+            jpg_name = dest_name.replace(".png", ".jpg")
+            out.save(PUBLIC / jpg_name, "JPEG", quality=85, optimize=True, progressive=True)
+            print(f"public/{jpg_name}")
 
 
 if __name__ == "__main__":
