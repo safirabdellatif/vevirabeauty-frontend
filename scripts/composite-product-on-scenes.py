@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "src" / "assets" / "products"
+AD_SOURCES = ROOT / "scripts" / "ad-sources"
 SCENES = ROOT / "scripts" / "scene-sources"
 PUBLIC = ROOT / "public" / "images" / "products"
 
@@ -37,6 +38,13 @@ LIFESTYLE_PLACEMENT = (0.52, 0.5, 0.92)
 
 
 def crop_product(slug: str) -> Image.Image:
+    if slug == "hair-loss-spray":
+        path = AD_SOURCES / "spray-real.png"
+        if path.exists():
+            im = Image.open(path).convert("RGBA")
+            alpha = im.split()[3]
+            bbox = alpha.point(lambda p: 255 if p > 30 else 0).getbbox()
+            return im.crop(bbox) if bbox else im
     path = ASSETS / f"{slug}.png"
     im = Image.open(path).convert("RGBA")
     w, h = im.size
