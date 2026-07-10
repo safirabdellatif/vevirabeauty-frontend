@@ -1,7 +1,9 @@
 /** Detail images served from public/images/products (Docker copies public/). */
 
 function detailExt(slug: string): string {
-  return slug === "hair-loss-spray" || slug === "melasma-cream" ? "jpg" : "png";
+  return slug === "hair-loss-spray" || slug === "melasma-cream" || slug === "joint-pain-oil"
+    ? "jpg"
+    : "png";
 }
 
 export function featureImagePath(slug: string, index: number): string {

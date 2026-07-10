@@ -1,5 +1,5 @@
-import jointPainOil from "@/assets/products/joint-pain-oil.png";
-import jointPainOilCard from "@/assets/products/joint-pain-oil-card.png";
+import jointPainOil from "@/assets/products/joint-pain-oil.jpg";
+import jointPainOilCard from "@/assets/products/joint-pain-oil-card.jpg";
 import hairLossSpray from "@/assets/products/hair-loss-spray.jpg";
 import hairLossSprayCard from "@/assets/products/hair-loss-spray-card.jpg";
 import melasmaCream from "@/assets/products/melasma-cream.jpg";
