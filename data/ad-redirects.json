@@ -1,47 +1,56 @@
 [
   {
-    "slug": "lp",
-    "target_path": "/lp",
-    "label": "Landing warming (page générique pub)",
-    "is_active": true,
-    "click_count": 0,
-    "created_at": "2026-07-11T00:00:00.000Z",
-    "updated_at": "2026-07-11T00:00:00.000Z"
-  },
-  {
     "slug": "hair-spray",
     "target_path": "/products/hair-loss-spray",
-    "label": "Spray cheveux — pub Facebook",
+    "label": "Spray cheveux — pub Facebook principale",
     "is_active": true,
     "click_count": 0,
-    "created_at": "2026-07-11T00:00:00.000Z",
-    "updated_at": "2026-07-11T00:00:00.000Z"
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
   },
   {
     "slug": "joint-escalier",
     "target_path": "/products/joint-pain-oil",
-    "label": "Joint — créa escalier (femme genou)",
+    "label": "Huile articulations — créa escalier",
     "is_active": true,
     "click_count": 0,
-    "created_at": "2026-07-05T00:00:00.000Z",
-    "updated_at": "2026-07-05T00:00:00.000Z"
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
   },
   {
     "slug": "joint-dos",
     "target_path": "/products/joint-pain-oil",
-    "label": "Joint — créa dos (homme travail)",
+    "label": "Huile articulations — créa dos",
     "is_active": true,
     "click_count": 0,
-    "created_at": "2026-07-05T00:00:00.000Z",
-    "updated_at": "2026-07-05T00:00:00.000Z"
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
   },
   {
     "slug": "joint-maman",
     "target_path": "/products/joint-pain-oil",
-    "label": "Joint — créa maman (famille genou)",
+    "label": "Huile articulations — créa maman",
     "is_active": true,
     "click_count": 0,
-    "created_at": "2026-07-05T00:00:00.000Z",
-    "updated_at": "2026-07-05T00:00:00.000Z"
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
+  },
+  {
+    "slug": "melasma",
+    "target_path": "/products/melasma-cream",
+    "label": "Crème mélasma — pub principale",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
+  },
+  {
+    "slug": "lp",
+    "target_path": "/lp",
+    "label": "Landing warming (générique — éviter dans Meta)",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-11T19:00:00.000Z",
+    "updated_at": "2026-07-11T19:00:00.000Z"
   }
 ]
