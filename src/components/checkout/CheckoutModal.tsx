@@ -81,8 +81,8 @@ export function CheckoutModal() {
     setStep("submitting");
     const eventId = generateEventId("Purchase");
     const sessionId = generateSessionId();
-    const attribution = getOrderAttribution();
     const cartItems = items;
+    const attribution = getOrderAttribution(cartItems.map((item) => item.productId));
     const total = totalPrice();
 
     try {

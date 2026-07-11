@@ -9,6 +9,15 @@
     "updated_at": "2026-07-11T00:00:00.000Z"
   },
   {
+    "slug": "hair-spray",
+    "target_path": "/products/hair-loss-spray",
+    "label": "Spray cheveux — pub Facebook",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-11T00:00:00.000Z",
+    "updated_at": "2026-07-11T00:00:00.000Z"
+  },
+  {
     "slug": "joint-escalier",
     "target_path": "/products/joint-pain-oil",
     "label": "Joint — créa escalier (femme genou)",

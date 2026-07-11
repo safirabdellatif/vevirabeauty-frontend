@@ -1,5 +1,7 @@
 "use client";
 
+import { PRODUCTS, type ProductId } from "@/content/products";
+
 export interface Attribution {
   landingPage: string;
   referrer: string;
@@ -98,6 +100,12 @@ function shouldUpgradeLanding(prevLanding: string, currentHref: string): boolean
   return currentPath.startsWith("/products/") && isWarmingLanding(prevPath);
 }
 
+function productLandingHref(productId: string): string | null {
+  if (!(productId in PRODUCTS) || typeof window === "undefined") return null;
+  const slug = PRODUCTS[productId as ProductId].slug;
+  return `${window.location.origin}/products/${slug}`;
+}
+
 function mergeLandingParams(prevLanding: string, productHref: string): string {
   try {
     const prev = new URL(prevLanding);
@@ -121,6 +129,19 @@ function mergeLandingParams(prevLanding: string, productHref: string): string {
   } catch {
     return productHref;
   }
+}
+
+function upgradeWarmingLanding(attribution: Attribution, targetHref: string): Attribution {
+  const upgraded = {
+    ...attribution,
+    landingPage: mergeLandingParams(attribution.landingPage, targetHref),
+  };
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(upgraded));
+  } catch {
+    /* ignore quota errors */
+  }
+  return upgraded;
 }
 
 /** First-touch landing URL (with query params) for the session — never overwritten. */
@@ -156,20 +177,28 @@ export function getStoredAttribution(): Attribution {
   return captureAttribution();
 }
 
-/** Final attribution sent with the order — prefers the product page when checkout happens there. */
-export function getOrderAttribution(): Attribution {
+/** Final attribution sent with the order — maps warming /lp traffic to the ordered product. */
+export function getOrderAttribution(cartProductIds: string[] = []): Attribution {
   const attribution = captureAttribution();
   if (typeof window === "undefined") return attribution;
 
-  const currentHref = window.location.href;
-  if (!shouldUpgradeLanding(attribution.landingPage, currentHref)) {
+  if (!isWarmingLanding(pathFromUrl(attribution.landingPage))) {
     return attribution;
   }
 
-  return {
-    ...attribution,
-    landingPage: mergeLandingParams(attribution.landingPage, currentHref),
-  };
+  for (const productId of cartProductIds) {
+    const productHref = productLandingHref(productId);
+    if (productHref) {
+      return upgradeWarmingLanding(attribution, productHref);
+    }
+  }
+
+  const currentHref = window.location.href;
+  if (shouldUpgradeLanding(attribution.landingPage, currentHref)) {
+    return upgradeWarmingLanding(attribution, currentHref);
+  }
+
+  return attribution;
 }
 
 function getCookie(name: string): string | null {
