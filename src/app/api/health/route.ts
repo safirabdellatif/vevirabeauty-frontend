@@ -10,7 +10,12 @@ export async function GET() {
     ok: true,
     service: "vevirabeauty-frontend",
     orders: {
-      mode: process.env.USE_BACKEND_ORDERS === "true" ? "backend_with_local_fallback" : "local",
+      mode:
+        process.env.USE_BACKEND_ORDERS === "false"
+          ? "local"
+          : process.env.BACKEND_API_URL || process.env.API_BASE_URL
+            ? "backend_with_local_fallback"
+            : "local",
     },
     google_sheet: {
       configured: Boolean(sheetUrl),

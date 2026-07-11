@@ -83,10 +83,14 @@ function enrichAttribution(prev: Attribution, current: Attribution): Attribution
 }
 
 function pathFromUrl(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return "";
+
   try {
-    return new URL(url).pathname;
+    return new URL(trimmed).pathname;
   } catch {
-    return "";
+    const path = trimmed.split("?")[0]?.split("#")[0] ?? "";
+    return path.startsWith("/") ? path : "";
   }
 }
 

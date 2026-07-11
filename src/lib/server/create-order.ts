@@ -1,4 +1,7 @@
 import { randomUUID } from "crypto";
+import {
+  resolveOrderLandingPage,
+} from "@/lib/server/resolve-order-landing";
 import { OFFERS, PRODUCTS, type ProductId } from "@/content/products";
 import { normalizeMoroccanPhone } from "@/lib/phone";
 import {
@@ -57,6 +60,21 @@ function errorResponse(code: string, message: string, status = 422) {
 }
 
 export async function handleCreateOrder(body: CreateOrderBody): Promise<Response> {
+  const items = body.cart?.items ?? [];
+  const productIds = items.filter((item) => item.source !== "upsell").map((item) => item.product_id);
+  const attribution = (body.attribution ?? {}) as Record<string, unknown>;
+  const resolvedLanding = resolveOrderLandingPage(
+    (attribution.landing_page as string | undefined) ?? (attribution.landingPage as string | undefined),
+    productIds,
+  );
+  body = {
+    ...body,
+    attribution: {
+      ...attribution,
+      landing_page: resolvedLanding,
+    },
+  };
+
   if (!validateName(body.customer?.name ?? "")) {
     return errorResponse("invalid_name", "فضلاً أدخلي اسمًا صحيحًا.");
   }
@@ -66,7 +84,6 @@ export async function handleCreateOrder(body: CreateOrderBody): Promise<Response
     return errorResponse("invalid_phone", "فضلاً أدخلي رقم جوال مغربي صحيح (06 أو 07).");
   }
 
-  const items = body.cart?.items ?? [];
   if (items.length === 0) {
     return errorResponse("empty_cart", "السلة فارغة.");
   }
@@ -95,7 +112,6 @@ export async function handleCreateOrder(body: CreateOrderBody): Promise<Response
 
   const orderId = randomUUID();
   const orderNumber = generateOrderNumber();
-  const productIds = sheetItems.filter((i) => i.source !== "upsell").map((i) => i.product_id);
   const upsell = selectUpsell(productIds);
   const upsellProduct = upsell ? PRODUCTS[upsell.productId] : null;
 
@@ -208,56 +224,57 @@ export async function tryBackendProxy(
   body: string,
   headers: Headers,
 ): Promise<Response | null> {
-  if (process.env.USE_BACKEND_ORDERS === "true") {
-    const base = (
-      process.env.BACKEND_API_URL ||
-      process.env.API_BASE_URL ||
-      ""
-    ).replace(/\/$/, "");
-    if (!base) return null;
+  if (process.env.USE_BACKEND_ORDERS === "false") return null;
 
-    const outHeaders = new Headers({ "Content-Type": "application/json" });
-    for (const name of ["cf-connecting-ip", "x-forwarded-for", "x-real-ip", "user-agent"]) {
-      const v = headers.get(name);
-      if (v) outHeaders.set(name, v);
-    }
+  const base = (
+    process.env.BACKEND_API_URL ||
+    process.env.API_BASE_URL ||
+    ""
+  ).replace(/\/$/, "");
+  if (!base) return null;
 
-    try {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 5000);
-      const res = await fetch(`${base}${path}`, {
-        method: "POST",
-        headers: outHeaders,
-        body,
-        signal: controller.signal,
+  const outHeaders = new Headers({ "Content-Type": "application/json" });
+  for (const name of ["cf-connecting-ip", "x-forwarded-for", "x-real-ip", "user-agent"]) {
+    const v = headers.get(name);
+    if (v) outHeaders.set(name, v);
+  }
+
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(`${base}${path}`, {
+      method: "POST",
+      headers: outHeaders,
+      body,
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    if (res.ok) {
+      const text = await res.text();
+      return new Response(text, {
+        status: res.status,
+        headers: { "Content-Type": "application/json" },
       });
-      clearTimeout(timer);
-      if (res.ok) {
-        const text = await res.text();
+    }
+    if (res.status === 422) {
+      const text = await res.text();
+      let useLocal = false;
+      try {
+        const parsed = JSON.parse(text) as { detail?: { code?: string } };
+        if (parsed.detail?.code === "invalid_product") useLocal = true;
+      } catch {
+        /* keep backend 422 */
+      }
+      if (!useLocal) {
         return new Response(text, {
-          status: res.status,
+          status: 422,
           headers: { "Content-Type": "application/json" },
         });
       }
-      if (res.status === 422) {
-        const text = await res.text();
-        let useLocal = false;
-        try {
-          const parsed = JSON.parse(text) as { detail?: { code?: string } };
-          if (parsed.detail?.code === "invalid_product") useLocal = true;
-        } catch {
-          /* keep backend 422 */
-        }
-        if (!useLocal) {
-          return new Response(text, {
-            status: 422,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
-      }
-    } catch {
-      /* fall through to local handler */
     }
+  } catch {
+    /* fall through to local handler */
   }
+
   return null;
 }
