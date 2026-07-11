@@ -1,5 +1,6 @@
 /** Built-in slugs shipped with the app (work even if data/ad-redirects.json is empty). */
 export const DEFAULT_AD_REDIRECTS: Record<string, string> = {
+  lp: "/lp",
   "joint-escalier": "/products/joint-pain-oil",
   "joint-dos": "/products/joint-pain-oil",
   "joint-maman": "/products/joint-pain-oil",

@@ -1,5 +1,14 @@
 [
   {
+    "slug": "lp",
+    "target_path": "/lp",
+    "label": "Landing warming (page générique pub)",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-11T00:00:00.000Z",
+    "updated_at": "2026-07-11T00:00:00.000Z"
+  },
+  {
     "slug": "joint-escalier",
     "target_path": "/products/joint-pain-oil",
     "label": "Joint — créa escalier (femme genou)",
