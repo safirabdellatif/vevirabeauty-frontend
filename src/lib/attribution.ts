@@ -80,6 +80,49 @@ function enrichAttribution(prev: Attribution, current: Attribution): Attribution
   return next;
 }
 
+function pathFromUrl(url: string): string {
+  try {
+    return new URL(url).pathname;
+  } catch {
+    return "";
+  }
+}
+
+function isWarmingLanding(path: string): boolean {
+  return path === "/lp" || path === "/" || path.startsWith("/ads/");
+}
+
+function shouldUpgradeLanding(prevLanding: string, currentHref: string): boolean {
+  const prevPath = pathFromUrl(prevLanding);
+  const currentPath = pathFromUrl(currentHref);
+  return currentPath.startsWith("/products/") && isWarmingLanding(prevPath);
+}
+
+function mergeLandingParams(prevLanding: string, productHref: string): string {
+  try {
+    const prev = new URL(prevLanding);
+    const product = new URL(productHref);
+    for (const key of [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_content",
+      "utm_term",
+      "fbclid",
+      "ttclid",
+      "scclid",
+    ]) {
+      const value = prev.searchParams.get(key);
+      if (value && !product.searchParams.has(key)) {
+        product.searchParams.set(key, value);
+      }
+    }
+    return product.href;
+  } catch {
+    return productHref;
+  }
+}
+
 /** First-touch landing URL (with query params) for the session — never overwritten. */
 export function captureAttribution(): Attribution {
   if (typeof window === "undefined") {
@@ -98,15 +141,8 @@ export function captureAttribution(): Attribution {
     const prev = JSON.parse(existing) as Attribution;
     const merged = enrichAttribution(prev, current);
 
-    // /lp is ad-warming only — once the user reaches a product page, attribute the order there.
-    try {
-      const prevPath = new URL(prev.landingPage).pathname;
-      const currentPath = new URL(current.landingPage).pathname;
-      if (currentPath.startsWith("/products/") && (prevPath === "/lp" || prevPath === "/")) {
-        merged.landingPage = current.landingPage;
-      }
-    } catch {
-      /* ignore invalid URLs */
+    if (shouldUpgradeLanding(prev.landingPage, current.landingPage)) {
+      merged.landingPage = mergeLandingParams(prev.landingPage, current.landingPage);
     }
 
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
@@ -117,12 +153,23 @@ export function captureAttribution(): Attribution {
 }
 
 export function getStoredAttribution(): Attribution {
-  if (typeof window === "undefined") return { landingPage: "", referrer: "" };
-  try {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
-    if (stored) return JSON.parse(stored) as Attribution;
-  } catch {}
   return captureAttribution();
+}
+
+/** Final attribution sent with the order — prefers the product page when checkout happens there. */
+export function getOrderAttribution(): Attribution {
+  const attribution = captureAttribution();
+  if (typeof window === "undefined") return attribution;
+
+  const currentHref = window.location.href;
+  if (!shouldUpgradeLanding(attribution.landingPage, currentHref)) {
+    return attribution;
+  }
+
+  return {
+    ...attribution,
+    landingPage: mergeLandingParams(attribution.landingPage, currentHref),
+  };
 }
 
 function getCookie(name: string): string | null {

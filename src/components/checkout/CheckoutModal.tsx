@@ -10,7 +10,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { useCheckoutStore } from "@/stores/checkout-store";
 import { isValidMoroccanPhone } from "@/lib/phone";
 import { createOrder } from "@/lib/api";
-import { getStoredAttribution } from "@/lib/attribution";
+import { getOrderAttribution } from "@/lib/attribution";
 import { generateEventId, generateSessionId } from "@/lib/events";
 import { trackInitiateCheckout, trackPurchase } from "@/lib/analytics";
 import { formatSARCompact } from "@/lib/money";
@@ -81,7 +81,7 @@ export function CheckoutModal() {
     setStep("submitting");
     const eventId = generateEventId("Purchase");
     const sessionId = generateSessionId();
-    const attribution = getStoredAttribution();
+    const attribution = getOrderAttribution();
     const cartItems = items;
     const total = totalPrice();
 

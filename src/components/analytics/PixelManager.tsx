@@ -15,6 +15,7 @@ export function PixelManager() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+    captureAttribution();
     trackPageView(window.location.href);
   }, [pathname]);
 
