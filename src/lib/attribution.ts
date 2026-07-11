@@ -97,6 +97,18 @@ export function captureAttribution(): Attribution {
 
     const prev = JSON.parse(existing) as Attribution;
     const merged = enrichAttribution(prev, current);
+
+    // /lp is ad-warming only — once the user reaches a product page, attribute the order there.
+    try {
+      const prevPath = new URL(prev.landingPage).pathname;
+      const currentPath = new URL(current.landingPage).pathname;
+      if (currentPath.startsWith("/products/") && (prevPath === "/lp" || prevPath === "/")) {
+        merged.landingPage = current.landingPage;
+      }
+    } catch {
+      /* ignore invalid URLs */
+    }
+
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
     return merged;
   } catch {}

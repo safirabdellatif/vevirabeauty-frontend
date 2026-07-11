@@ -1,5 +1,9 @@
-/** Slugs pub → page cible. Admin UI + AD_REDIRECTS_JSON uniquement. */
-export const DEFAULT_AD_REDIRECTS: Record<string, string> = {};
+/** Built-in slugs shipped with the app (work even if data/ad-redirects.json is empty). */
+export const DEFAULT_AD_REDIRECTS: Record<string, string> = {
+  "joint-escalier": "/products/joint-pain-oil",
+  "joint-dos": "/products/joint-pain-oil",
+  "joint-maman": "/products/joint-pain-oil",
+};
 
 export function getEnvSlugMap(): Record<string, string> {
   const map: Record<string, string> = {};
@@ -22,5 +26,5 @@ export function getEnvSlugMap(): Record<string, string> {
 
 export function resolveEnvSlug(slug: string): string | null {
   const key = slug.trim().toLowerCase();
-  return getEnvSlugMap()[key] ?? null;
+  return getEnvSlugMap()[key] ?? DEFAULT_AD_REDIRECTS[key] ?? null;
 }

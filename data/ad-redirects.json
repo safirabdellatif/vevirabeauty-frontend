@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "slug": "joint-escalier",
+    "target_path": "/products/joint-pain-oil",
+    "label": "Joint — créa escalier (femme genou)",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-05T00:00:00.000Z",
+    "updated_at": "2026-07-05T00:00:00.000Z"
+  },
+  {
+    "slug": "joint-dos",
+    "target_path": "/products/joint-pain-oil",
+    "label": "Joint — créa dos (homme travail)",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-05T00:00:00.000Z",
+    "updated_at": "2026-07-05T00:00:00.000Z"
+  },
+  {
+    "slug": "joint-maman",
+    "target_path": "/products/joint-pain-oil",
+    "label": "Joint — créa maman (famille genou)",
+    "is_active": true,
+    "click_count": 0,
+    "created_at": "2026-07-05T00:00:00.000Z",
+    "updated_at": "2026-07-05T00:00:00.000Z"
+  }
+]
