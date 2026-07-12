@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getOpenAiConfig, isWhatsAppConfigured } from "@/lib/whatsapp/config";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -6,6 +7,7 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   const sheetUrl = process.env.SHEET_WEBHOOK_URL || process.env.GOOGLE_SHEET_WEBHOOK_URL || "";
   const backendUrl = process.env.BACKEND_API_URL || process.env.API_BASE_URL || "";
+  const openai = getOpenAiConfig();
   return NextResponse.json({
     ok: true,
     service: "vevirabeauty-frontend",
@@ -22,5 +24,11 @@ export async function GET() {
       webhook_url_suffix: sheetUrl ? sheetUrl.replace(/\/$/, "").split("/").pop()?.slice(0, 12) : null,
     },
     backend_api: backendUrl || null,
+    whatsapp_bot: {
+      configured: isWhatsAppConfigured(),
+      openai: Boolean(openai.apiKey),
+      model: openai.model,
+      webhook: "/api/whatsapp/webhook",
+    },
   });
 }

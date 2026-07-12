@@ -37,6 +37,7 @@ ENV BACKEND_API_URL=$BACKEND_API_URL
 ENV REDIRECT_ADMIN_USERNAME=$REDIRECT_ADMIN_USERNAME
 ENV REDIRECT_ADMIN_PASSWORD=$REDIRECT_ADMIN_PASSWORD
 ENV AD_REDIRECTS_FILE=/app/data/ad-redirects.json
+ENV WHATSAPP_SESSIONS_FILE=/app/data/whatsapp-sessions.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
