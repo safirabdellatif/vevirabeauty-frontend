@@ -2,7 +2,8 @@ import { PRODUCTS, type ProductId } from "@/content/products";
 import { handleCreateOrder, type CreateOrderBody } from "@/lib/server/create-order";
 import { normalizeCreateOrderResult } from "@/lib/normalize-order-response";
 import { resolveProductId } from "@/lib/whatsapp/catalog";
-import type { AgentOrderDraft } from "@/lib/whatsapp/agent";
+import type { AgentOrderDraft, ReplyLang } from "@/lib/whatsapp/agent";
+import { detectReplyLang } from "@/lib/whatsapp/agent";
 
 export interface WhatsAppOrderResult {
   ok: boolean;
@@ -13,10 +14,18 @@ export interface WhatsAppOrderResult {
 export async function createOrderFromWhatsApp(
   draft: AgentOrderDraft,
   waId: string,
+  langHint?: ReplyLang,
 ): Promise<WhatsAppOrderResult> {
   const productId = resolveProductId(String(draft.product_id));
+  const lang = langHint ?? detectReplyLang(draft.name || "");
   if (!productId) {
-    return { ok: false, message: "ماقدرتش نحدد المنتج. قولي: زيت المفاصل، رشاش الشعر، ولا كريم الكلف." };
+    return {
+      ok: false,
+      message:
+        lang === "fr"
+          ? "Je n’ai pas pu identifier le produit. Dites : huile articulations, spray cheveux, ou crème mélasma."
+          : "ماقدرتش نحدد المنتج. قولي: زيت المفاصل، رشاش الشعر، ولا كريم الكلف.",
+    };
   }
 
   const quantity = draft.quantity === 1 || draft.quantity === 3 ? draft.quantity : 2;
@@ -63,7 +72,10 @@ export async function createOrderFromWhatsApp(
       const msg =
         typeof detail === "string"
           ? detail
-          : detail?.message || "ماقدرتش نسجّل الطلب. تأكد من الاسم ورقم 06/07.";
+          : detail?.message ||
+            (lang === "fr"
+              ? "Impossible d’enregistrer la commande. Vérifiez le nom et un numéro 06/07."
+              : "ماقدرتش نسجّل الطلب. تأكد من الاسم ورقم 06/07.");
       return { ok: false, message: msg };
     }
 
@@ -71,10 +83,19 @@ export async function createOrderFromWhatsApp(
     return {
       ok: true,
       orderNumber: order.orderNumber,
-      message: `تم تسجيل طلبك رقم ${order.orderNumber} ✅ المجموع ${order.total} درهم. غادي نتصلو بيك باش نأكدو العنوان. شكراً ليك 💚`,
+      message:
+        lang === "fr"
+          ? `Commande ${order.orderNumber} enregistrée ✅ Total ${order.total} MAD. On vous appelle bientôt pour confirmer l’adresse. Merci 💚`
+          : `تم تسجيل طلبك رقم ${order.orderNumber} ✅ المجموع ${order.total} درهم. غادي نتصلو بيك باش نأكدو العنوان. شكراً ليك 💚`,
     };
   } catch (err) {
     console.error("[whatsapp] create order failed", err);
-    return { ok: false, message: "صار خطأ مؤقت فتسجيل الطلب. عاود من بعد شوية ولا طلب من الموقع." };
+    return {
+      ok: false,
+      message:
+        lang === "fr"
+          ? "Erreur temporaire lors de l’enregistrement. Réessayez plus tard ou commandez sur le site."
+          : "صار خطأ مؤقت فتسجيل الطلب. عاود من بعد شوية ولا طلب من الموقع.",
+    };
   }
 }

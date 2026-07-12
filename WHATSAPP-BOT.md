@@ -53,7 +53,7 @@ Puis **Rebuild + Redeploy** le frontend.
 
 1. `https://vevirabeauty.com/api/health` → `"whatsapp_bot": { "configured": true, "openai": true }`
 2. Dans Meta → Webhook → **Test** / envoyer un message au numéro
-3. Le bot doit répondre en **darija**, pousser l’offre **2 pièces / 289 DH**, et pouvoir créer une commande COD
+3. Le bot doit répondre en **français ou darija** (même langue que le client), pousser l’offre **2 pièces / 289 DH**, et pouvoir créer une commande COD
 
 ---
 

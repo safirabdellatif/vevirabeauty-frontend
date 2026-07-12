@@ -101,9 +101,14 @@ async function handleOneMessage(inbound: InboundText): Promise<void> {
   let reply = agent.reply;
 
   if (agent.action === "escalate") {
-    reply = await escalateToHuman(waId, agent.escalate_reason || "escalation", text);
+    reply = await escalateToHuman(
+      waId,
+      agent.escalate_reason || "escalation",
+      text,
+      agent.lang,
+    );
   } else if (agent.action === "create_order" && agent.order) {
-    const orderResult = await createOrderFromWhatsApp(agent.order, waId);
+    const orderResult = await createOrderFromWhatsApp(agent.order, waId, agent.lang);
     if (orderResult.ok) {
       reply = `${agent.reply}\n\n${orderResult.message}`.trim();
       const s = getSession(waId);

@@ -1,10 +1,12 @@
 import { supportEmail } from "@/lib/whatsapp/config";
 import { markEscalated } from "@/lib/whatsapp/memory";
+import { detectReplyLang, type ReplyLang } from "@/lib/whatsapp/agent";
 
 export async function escalateToHuman(
   waId: string,
   reason: string,
   lastUserMessage: string,
+  lang?: ReplyLang,
 ): Promise<string> {
   markEscalated(waId);
 
@@ -32,5 +34,9 @@ export async function escalateToHuman(
     }
   }
 
+  const replyLang = lang ?? detectReplyLang(lastUserMessage);
+  if (replyLang === "fr") {
+    return `Compris, je vous passe à notre équipe 💚. Quelqu’un vous répondra ici sur WhatsApp bientôt. Pour réactiver le bot, dites : « retour bot ».`;
+  }
   return `فهمت، غادي نخليك مع الفريق ديالنا 💚 غادي يردو عليك هنا ف واتساب قريب. إلا بغيتي ترجع للبوت قول: «رجع البوت».`;
 }
