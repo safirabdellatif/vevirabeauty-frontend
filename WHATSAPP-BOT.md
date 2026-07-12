@@ -52,8 +52,23 @@ Puis **Rebuild + Redeploy** le frontend.
 ## Vérification
 
 1. `https://vevirabeauty.com/api/health` → `"whatsapp_bot": { "configured": true, "openai": true }`
-2. Dans Meta → Webhook → **Test** / envoyer un message au numéro
-3. Le bot doit répondre en **français ou darija** (même langue que le client), pousser l’offre **2 pièces / 289 DH**, et pouvoir créer une commande COD
+2. Diagnostic : `https://vevirabeauty.com/api/whatsapp/status`
+   - `graphApi.ok: true` → token + Phone number ID OK
+   - `runtime.lastInboundAt` → Meta envoie les messages
+   - `runtime.lastSendError` → erreur d’envoi (souvent token expiré)
+3. Dans Meta → Webhook → Subscribe **messages** + Callback URL exacte
+4. Envoyer un message test depuis **un autre téléphone** (pas le même numéro business)
+5. Le bot répond en **français ou darija**, pousse l’offre **2 pièces / 289 DH**
+
+### Si ça ne répond pas
+
+| Symptôme sur `/api/whatsapp/status` | Fix |
+|-------------------------------------|-----|
+| `graphApi.ok: false` | Token expiré / mauvais `PHONE_NUMBER_ID` → nouveau token permanent |
+| `lastWebhookAt: null` | Webhook Meta pas connecté ou pas abonné à `messages` |
+| `lastSignatureOk: false` | Mauvais `WHATSAPP_APP_SECRET` (App Settings → Basic) — ou `WHATSAPP_IGNORE_SIGNATURE=1` temporaire |
+| `lastInboundAt` OK mais `lastSendError` | Token invalide pour l’envoi |
+| Toujours sur l’app téléphone seule | Le numéro n’est pas sur **Cloud API** — migrer dans Meta |
 
 ---
 

@@ -1,22 +1,38 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { getWhatsAppConfig } from "@/lib/whatsapp/config";
+import { patchWhatsAppStatus } from "@/lib/whatsapp/status";
 
 export function verifyMetaSignature(rawBody: string, signatureHeader: string | null): boolean {
+  if (process.env.WHATSAPP_IGNORE_SIGNATURE === "1") {
+    console.warn("[whatsapp] signature check skipped (WHATSAPP_IGNORE_SIGNATURE=1)");
+    return true;
+  }
+
   const { appSecret } = getWhatsAppConfig();
   if (!appSecret) {
-    // Allow local/dev without secret; production should set WHATSAPP_APP_SECRET
-    return process.env.NODE_ENV !== "production";
+    console.warn("[whatsapp] WHATSAPP_APP_SECRET missing — accepting webhook without signature");
+    return true;
   }
-  if (!signatureHeader?.startsWith("sha256=")) return false;
-  const expected = createHmac("sha256", appSecret).update(rawBody).digest("hex");
+  if (!signatureHeader?.startsWith("sha256=")) {
+    console.warn("[whatsapp] missing x-hub-signature-256 header");
+    return false;
+  }
+  const expected = createHmac("sha256", appSecret).update(rawBody, "utf8").digest("hex");
   const received = signatureHeader.slice("sha256=".length);
   try {
-    const a = Buffer.from(expected, "utf8");
-    const b = Buffer.from(received, "utf8");
+    const a = Buffer.from(expected, "hex");
+    const b = Buffer.from(received, "hex");
     if (a.length !== b.length) return false;
     return timingSafeEqual(a, b);
   } catch {
-    return false;
+    try {
+      const a = Buffer.from(expected, "utf8");
+      const b = Buffer.from(received, "utf8");
+      if (a.length !== b.length) return false;
+      return timingSafeEqual(a, b);
+    } catch {
+      return false;
+    }
   }
 }
 
@@ -24,6 +40,10 @@ export async function sendWhatsAppText(toE164Digits: string, body: string): Prom
   const { token, phoneNumberId, apiVersion } = getWhatsAppConfig();
   if (!token || !phoneNumberId) {
     console.error("[whatsapp] missing WHATSAPP_TOKEN or WHATSAPP_PHONE_NUMBER_ID");
+    patchWhatsAppStatus({
+      lastSendOk: false,
+      lastSendError: "missing_token_or_phone_number_id",
+    });
     return false;
   }
 
@@ -47,8 +67,14 @@ export async function sendWhatsAppText(toE164Digits: string, body: string): Prom
   if (!res.ok) {
     const errText = await res.text().catch(() => "");
     console.error("[whatsapp] send failed", res.status, errText);
+    patchWhatsAppStatus({
+      lastSendOk: false,
+      lastSendError: `HTTP ${res.status}: ${errText.slice(0, 400)}`,
+    });
     return false;
   }
+
+  patchWhatsAppStatus({ lastSendOk: true, lastSendError: null });
   return true;
 }
 

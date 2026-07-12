@@ -15,6 +15,7 @@ import {
 } from "@/lib/whatsapp/memory";
 import { createOrderFromWhatsApp } from "@/lib/whatsapp/orders";
 import { markWhatsAppRead, sendWhatsAppText, verifyMetaSignature } from "@/lib/whatsapp/send";
+import { patchWhatsAppStatus } from "@/lib/whatsapp/status";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +32,11 @@ export async function GET(req: NextRequest) {
     return new Response(challenge, { status: 200, headers: { "Content-Type": "text/plain" } });
   }
 
+  console.warn("[whatsapp] verify failed", {
+    mode,
+    tokenMatch: Boolean(token && verifyToken && token === verifyToken),
+    hasChallenge: Boolean(challenge),
+  });
   return Response.json({ error: "verification_failed" }, { status: 403 });
 }
 
@@ -51,6 +57,11 @@ function extractInboundTexts(body: unknown): InboundText[] {
             id?: string;
             type?: string;
             text?: { body?: string };
+            button?: { text?: string };
+            interactive?: {
+              button_reply?: { title?: string };
+              list_reply?: { title?: string };
+            };
           }>;
         };
       }>;
@@ -60,11 +71,22 @@ function extractInboundTexts(body: unknown): InboundText[] {
   for (const entry of root.entry ?? []) {
     for (const change of entry.changes ?? []) {
       for (const msg of change.value?.messages ?? []) {
-        if (msg.type !== "text" || !msg.from || !msg.text?.body) continue;
+        if (!msg.from) continue;
+        let text = "";
+        if (msg.type === "text" && msg.text?.body) text = msg.text.body.trim();
+        else if (msg.type === "button" && msg.button?.text) text = msg.button.text.trim();
+        else if (msg.type === "interactive") {
+          text = (
+            msg.interactive?.button_reply?.title ||
+            msg.interactive?.list_reply?.title ||
+            ""
+          ).trim();
+        }
+        if (!text) continue;
         out.push({
           waId: msg.from,
           messageId: msg.id ?? "",
-          text: msg.text.body.trim(),
+          text,
         });
       }
     }
@@ -76,6 +98,12 @@ async function handleOneMessage(inbound: InboundText): Promise<void> {
   const { waId, messageId, text } = inbound;
   if (!text) return;
 
+  patchWhatsAppStatus({
+    lastInboundAt: new Date().toISOString(),
+    lastInboundFrom: waId,
+    lastInboundPreview: text.slice(0, 120),
+  });
+
   void markWhatsAppRead(messageId);
 
   if (looksLikeResumeBot(text)) {
@@ -84,7 +112,6 @@ async function handleOneMessage(inbound: InboundText): Promise<void> {
 
   const session = getSession(waId);
   if (isEscalated(session) && !looksLikeResumeBot(text)) {
-    // Human mode — do not auto-reply
     appendMessage(waId, "user", text);
     return;
   }
@@ -120,20 +147,35 @@ async function handleOneMessage(inbound: InboundText): Promise<void> {
   }
 
   appendMessage(waId, "assistant", reply);
-  await sendWhatsAppText(waId, reply);
+  const sent = await sendWhatsAppText(waId, reply);
+  if (!sent) {
+    patchWhatsAppStatus({
+      lastError: "send_failed_after_ai_reply — check WHATSAPP_TOKEN / PHONE_NUMBER_ID",
+    });
+  }
 }
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
+  patchWhatsAppStatus({ lastWebhookAt: new Date().toISOString() });
 
   if (!isWhatsAppConfigured()) {
     console.warn("[whatsapp] webhook hit but WhatsApp env not configured");
+    patchWhatsAppStatus({ lastError: "not_configured" });
     return Response.json({ ok: true, skipped: "not_configured" });
   }
 
   const signature = req.headers.get("x-hub-signature-256");
-  if (!verifyMetaSignature(rawBody, signature)) {
-    return Response.json({ error: "invalid_signature" }, { status: 401 });
+  const sigOk = verifyMetaSignature(rawBody, signature);
+  patchWhatsAppStatus({ lastSignatureOk: sigOk });
+
+  if (!sigOk) {
+    console.warn("[whatsapp] invalid signature — check WHATSAPP_APP_SECRET");
+    patchWhatsAppStatus({
+      lastError: "invalid_signature — WHATSAPP_APP_SECRET must be Meta App Secret",
+    });
+    // Return 200 so Meta does not disable the webhook while you fix the secret.
+    return Response.json({ ok: true, skipped: "invalid_signature" });
   }
 
   let body: unknown;
@@ -144,11 +186,20 @@ export async function POST(req: NextRequest) {
   }
 
   const messages = extractInboundTexts(body);
+  if (messages.length === 0) {
+    return Response.json({ ok: true, empty: true });
+  }
 
-  // Acknowledge Meta quickly; process async-ish in same request (Next.js)
-  await Promise.all(messages.map((m) => handleOneMessage(m).catch((err) => {
-    console.error("[whatsapp] handle message failed", err);
-  })));
+  await Promise.all(
+    messages.map((m) =>
+      handleOneMessage(m).catch((err) => {
+        console.error("[whatsapp] handle message failed", err);
+        patchWhatsAppStatus({
+          lastError: err instanceof Error ? err.message : "handle_failed",
+        });
+      }),
+    ),
+  );
 
-  return Response.json({ ok: true });
+  return Response.json({ ok: true, handled: messages.length });
 }
