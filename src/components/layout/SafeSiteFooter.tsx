@@ -27,6 +27,16 @@ export function SafeSiteFooter() {
               </li>
               <li>
                 <a
+                  href={SITE.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  واتساب — {SITE.whatsappDisplay}
+                </a>
+              </li>
+              <li>
+                <a
                   href={`mailto:${SITE.supportEmail}`}
                   className="hover:text-white transition-colors"
                 >

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { PhoneCall, Mail, MessageCircle } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 import { SITE } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "تواصل معنا",
-  description: "تواصل مع فريق فيرا بيوتي عبر البريد الإلكتروني أو نموذج التواصل. نحن هنا للمساعدة.",
+  description:
+    "تواصل مع فريق فيرا بيوتي عبر واتساب أو البريد الإلكتروني. نحن هنا للمساعدة.",
 };
 
 export default function ContactPage() {
@@ -19,15 +20,22 @@ export default function ContactPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-green-50 border-2 border-green-200 rounded-3xl p-6 flex items-center gap-4">
+          <a
+            href={SITE.whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-50 border-2 border-green-200 rounded-3xl p-6 flex items-center gap-4 hover:shadow-card transition-shadow"
+          >
             <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
               <MessageCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="font-bold text-brand-charcoal">نموذج التواصل</p>
-              <p className="text-sm text-brand-gray">عبّئ النموذج بالأسفل ونرد عليك بأسرع وقت</p>
+              <p className="font-bold text-brand-charcoal">واتساب</p>
+              <p className="text-sm text-brand-gray" dir="ltr">
+                {SITE.whatsappDisplay}
+              </p>
             </div>
-          </div>
+          </a>
 
           <a
             href={`mailto:${SITE.supportEmail}`}
@@ -89,7 +97,16 @@ export default function ContactPage() {
             <span className="font-semibold text-brand-charcoal">ساعات الدعم:</span> أيام الأسبوع من 9 صباحًا حتى 10 مساءً (بتوقيت الدار البيضاء)
           </p>
           <p className="text-sm text-brand-gray mt-2">
-            سيتم التواصل معك لتأكيد الطلب قبل الشحن في حال قدّمت طلبًا.
+            أسرع طريقة للتواصل:{" "}
+            <a
+              href={SITE.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-green-700 hover:underline"
+            >
+              واتساب
+            </a>
+            . سيتم التواصل معك لتأكيد الطلب قبل الشحن في حال قدّمت طلبًا.
           </p>
         </div>
       </div>

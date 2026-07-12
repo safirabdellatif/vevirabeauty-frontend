@@ -7,6 +7,11 @@ export const SITE = {
   url: "https://vevirabeauty.com",
   apiUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
   supportEmail: "contact@vevirabeauty.com",
+  whatsappPhone: "212755282978",
+  whatsappDisplay: "07 55 28 29 78",
+  whatsappUrl:
+    "https://wa.me/212755282978?text=" +
+    encodeURIComponent("السلام عليكم، بغيت نسول على منتجات فيرا بيوتي"),
   social: {
     tiktok: "https://tiktok.com/@vevirabeauty",
     snapchat: "https://snapchat.com/add/vevirabeauty",

@@ -37,6 +37,16 @@ export function SiteFooter() {
             <h3 className="font-semibold mb-4 text-brand-gold">المساعدة</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li><Link href="/contact" className="hover:text-white transition-colors">تواصل معنا</Link></li>
+              <li>
+                <a
+                  href={SITE.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  واتساب — {SITE.whatsappDisplay}
+                </a>
+              </li>
               <li><Link href="/returns" className="hover:text-white transition-colors">الاستبدال والإرجاع</Link></li>
               <li><a href={`mailto:${SITE.supportEmail}`} className="hover:text-white transition-colors">{SITE.supportEmail}</a></li>
             </ul>
